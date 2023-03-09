@@ -1,19 +1,23 @@
 pub mod column;
+pub mod row;
 
 use sycamore::prelude::*;
 
-use self::column::Column;
+use self::{column::Column, row::{Row, RowValue}};
 
 
 #[derive(Prop)]
-pub struct Properties<'a> {
+pub struct Properties<'a, T: RowValue> {
     columns: Vec<Column<'a>>,
+    rows: Vec<Row<T>>
 }
 
 
 #[component]
-pub fn Table<G: Html>(cx: Scope, props: Properties) -> View<G> {
+pub fn Table<G: Html, T: RowValue>(cx: Scope, props: Properties<T>) -> View<G> {
     let columns = columns(cx, props.columns);
+    //let rows = create_signal(cx, create_ref(cx, props.rows));
+    let rows = create_signal(cx, props.rows);
 
     view! { cx,
         table {
@@ -24,9 +28,16 @@ pub fn Table<G: Html>(cx: Scope, props: Properties) -> View<G> {
             }
 
             tbody {
-                tr {
-                    td { "b tody" }
-                }
+                Keyed(
+                    iterable=rows,
+                    view=|cx, x| view! { cx,
+                        tr {
+                            td { (x.key()) }
+                        }
+                    },
+                    key=|x| x.key(),
+                )
+                
             }
         }
     }
