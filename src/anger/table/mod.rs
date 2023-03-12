@@ -14,39 +14,23 @@ pub struct Properties<'a, T: RowValue> {
 
 
 #[component]
-pub fn Table<G: Html, T: RowValue>(cx: Scope, props: Properties<T>) -> View<G> {
-    let columns = columns(cx, props.columns);
-    //let rows = create_signal(cx, create_ref(cx, props.rows));
-    let rows = create_signal(cx, props.rows);
+pub fn Table<'a, G: Html, T: RowValue + 'a>(cx: Scope<'a>, props: Properties<T>) -> View<G> {
+    let header = Header(cx, props.columns);
+    let body : View<G> = Body(cx, props.rows);
 
     view! { cx,
         table {
-            thead {
-                tr {
-                    th { (columns) }
-                }
-            }
+            thead { (header) }
 
-            tbody {
-                Keyed(
-                    iterable=rows,
-                    view=|cx, x| view! { cx,
-                        tr {
-                            td { (x.key()) }
-                        }
-                    },
-                    key=|x| x.key(),
-                )
-                
-            }
+            tbody { (body) }
         }
     }
 }
 
 
 #[component]
-fn columns<G: Html>(cx: Scope, columns: Vec<Column>) -> View<G> {
-    View::new_fragment(
+fn Header<G: Html>(cx: Scope, columns: Vec<Column>) -> View<G> {
+    let columns = View::new_fragment(
         columns.iter().map(|x| {
             let label = x.label();
             view! { cx, 
@@ -54,5 +38,29 @@ fn columns<G: Html>(cx: Scope, columns: Vec<Column>) -> View<G> {
             }
         })
         .collect()
+    );
+
+    view!(
+        cx,
+        tr {
+            th { (columns) }
+        }
+    )
+}
+
+#[component]
+fn Body<'a, G: Html, R: RowValue + 'a>(cx: Scope<'a>, rows: Vec<Row<R>>) -> View<G> {
+    let rows = create_signal(cx, rows);
+
+    view!(cx,
+        Keyed(
+            iterable=rows,
+            view=|cx, x| view! { cx,
+                tr {
+                    td { (x.key()) }
+                }
+            },
+            key= |x| x.key(),
+        )
     )
 }
