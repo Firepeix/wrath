@@ -1,5 +1,0 @@
-
-
-fn main() {
-    wrath::start()
-}
