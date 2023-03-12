@@ -38,6 +38,7 @@ kotlin {
                     static = mutableListOf("$buildDir/processedResources/js/main")
                 )
             }
+
             webpackTask {
                 outputFileName = "main.bundle.js"
             }

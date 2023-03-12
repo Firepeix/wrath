@@ -8,8 +8,6 @@ import com.tutu.wrath.modules.income.models.Income
 import com.tutu.wrath.modules.user.models.User
 import com.tutu.wrath.util.Money
 import io.kvision.Application
-import io.kvision.BootstrapCssModule
-import io.kvision.BootstrapModule
 import io.kvision.CoreModule
 import io.kvision.html.div
 import io.kvision.i18n.DefaultI18nManager
@@ -23,7 +21,7 @@ import io.kvision.types.LocalDateTime
 
 class App : Application() {
     init {
-        //require("css/kvapp.css")
+        require("css/main.css")
     }
 
     override fun start(state: Map<String, Any>) {
