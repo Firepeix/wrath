@@ -4,7 +4,7 @@ import io.kvision.core.Container
 import io.kvision.html.*
 
 fun Container.navbar() {
-    nav(className = "navbar bg-base-100") {
+    nav(className = "navbar bg-primary text-primary-content") {
         div(className = "flex-none") { button("", className = "btn btn-square btn-ghost") {
             customTag("svg", className = "inline-block w-5 h-5 stroke-current", attributes = mapOf(
                 "xmlns" to "http://www.w3.org/2000/svg",

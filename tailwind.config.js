@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: [
+    "./src/main/resources/css/app.css",
+    "./src/main/kotlin/**/*.{html,js,kt}",
+    "./src/main/web/*.{html,js,kt}",
+  ],
   theme: {
     extend: {},
   },
@@ -8,9 +12,9 @@ module.exports = {
         themes: [
           {
             wrath: {
-                "primary": "#f87171",
+                "primary": "#dc2626",
                 "secondary": "#2563eb",
-                "accent": "#84cc16",
+                "accent": "#22c55e",
                 "neutral": "#191D24",
                 "base-100": "#2A303C",
                 "info": "#3ABFF8",
