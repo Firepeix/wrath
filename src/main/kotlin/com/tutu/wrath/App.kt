@@ -1,5 +1,6 @@
 package com.tutu.wrath
 
+import com.tutu.wrath.anger.layout.header
 import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.table
@@ -34,20 +35,7 @@ class App : Application() {
         //    )
 
         root("kvapp") {
-            table(
-                listOf(
-                    Column("name", "Nome"),
-                    Column("amount", "Valor"),
-                    Column("origin", "Origem"),
-                ),
-                listOf(
-                    Row(Income(name = "Viagem", amount = Money(20000), origin =  User("Tatielle"), data = LocalDateTime(), frequency = Frequency.ONCE)),
-                    Row(Income(name = "Hotel", amount = Money(15600), origin = User("Wendy"), data = LocalDateTime(), frequency = Frequency.ONCE)),
-                    Row(Income(name = "Niver", amount = Money(9800), origin = User("Mãe"), data = LocalDateTime(), frequency = Frequency.ONCE)),
-                    Row(Income(name = "Niver", amount = Money(-41), origin = User("a"), data = LocalDateTime(), frequency = Frequency.ONCE)),
-                    Row(Income(name = "Salario", amount = Money(898990), origin = User("Picpay"), data = LocalDateTime(), frequency = Frequency.ONCE)),
-                )
-            )
+            header()
         }
     }
 
