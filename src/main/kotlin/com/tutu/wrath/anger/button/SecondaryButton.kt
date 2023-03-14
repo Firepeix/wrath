@@ -1,15 +1,21 @@
 package com.tutu.wrath.anger.button
 
 import io.kvision.core.Container
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
 import io.kvision.html.Button
-import io.kvision.html.button
-import io.kvision.panel.SimplePanel
-import org.w3c.dom.events.MouseEvent
 
-class SecondaryButton(text: String, handler: ActionButton) : SimplePanel() {
+class SecondaryButton(text: String, handler: ActionButton) : Button(text) {
 
     init {
-        button(text).onClick(handler)
+        borderRadius = CssSize(4, UNIT.px)
+        onClick(handler)
     }
+}
+
+fun Container.secondaryButton(text: String, handler: ActionButton) : SecondaryButton {
+    val component = SecondaryButton(text, handler)
+    this.add(component)
+    return component
 }
 

@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 plugins {
     val kotlinVersion: String by System.getProperties()
@@ -22,9 +23,33 @@ val kvisionVersion: String by System.getProperties()
 
 val webDir = file("src/main/web")
 
+task("pre-build") {
+    if (System.getProperty("os.name").toLowerCaseAsciiOnly().contains("windows")) {
+        println("Executando tailwindcss")
+        exec {
+            executable("whoami")
+            args("-o", "./src/main/resources/css/main.css", "--watch")
+        }
+    }
+}
+
+
 kotlin {
     js {
         browser {
+            runTask {
+                outputFileName = "main.bundle.js"
+                sourceMaps = false
+                devServer = KotlinWebpackConfig.DevServer(
+                    open = false,
+                    port = 3000,
+                    proxy = mutableMapOf(
+                        "/kv/*" to "http://localhost:8080",
+                        "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
+                    ),
+                    static = mutableListOf("$buildDir/processedResources/js/main")
+                )
+            }
             runTask {
                 outputFileName = "main.bundle.js"
                 sourceMaps = false
@@ -42,6 +67,7 @@ kotlin {
             webpackTask {
                 outputFileName = "main.bundle.js"
             }
+
             testTask {
                 useKarma {
                     useChromeHeadless()
@@ -54,6 +80,7 @@ kotlin {
         implementation("io.kvision:kvision:$kvisionVersion")
         implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
         implementation("io.kvision:kvision-i18n:$kvisionVersion")
+        implementation("io.kvision:kvision-rest:$kvisionVersion")
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))

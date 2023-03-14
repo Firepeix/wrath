@@ -3,7 +3,6 @@ package com.tutu.wrath
 import com.tutu.wrath.anger.layout.header
 import io.kvision.Application
 import io.kvision.CoreModule
-import io.kvision.html.main
 import io.kvision.module
 import io.kvision.panel.root
 import io.kvision.require
@@ -12,6 +11,7 @@ import com.tutu.wrath.anger.layout.main as mainApp
 
 class App : Application() {
     init {
+        require("css/anger.css")
         require("css/main.css")
     }
 

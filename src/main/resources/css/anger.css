@@ -1,0 +1,16 @@
+table tr th {
+  text-align: right;
+  border-radius: 0 !important;
+}
+
+table tr th:first-child {
+  text-align: left !important;
+}
+
+table tr td {
+  text-align: right;
+}
+
+table tr td:first-child {
+  text-align: left !important;
+}

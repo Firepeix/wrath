@@ -1,5 +1,5 @@
 help:
     just --list
 
-just build-css:
-    tailwind.exe -mo src\main\resources\css\main.css --watch
+build-css:
+    ./tailwind -o src/main/resources/css/main.css --watch
