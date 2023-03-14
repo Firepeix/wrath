@@ -11,3 +11,4 @@ tailwind.exe
 tailwind
 node_modules
 .gradle/*
+*.DS_Store
