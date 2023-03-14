@@ -8,5 +8,6 @@ out/
 *.iws
 *.idea
 tailwind.exe
+tailwind
 node_modules
 .gradle/*
