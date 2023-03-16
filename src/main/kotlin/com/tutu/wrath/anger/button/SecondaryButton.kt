@@ -5,7 +5,7 @@ import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.html.Button
 
-class SecondaryButton(text: String, handler: ActionButton) : Button(text) {
+class SecondaryButton(text: String, handler: ActionButton) : Button(text, className = "btn btn-secondary") {
 
     init {
         borderRadius = CssSize(4, UNIT.px)

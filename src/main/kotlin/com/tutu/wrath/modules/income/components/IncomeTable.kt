@@ -4,14 +4,22 @@ import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.table
 import com.tutu.wrath.modules.accounting.models.Frequency
+import com.tutu.wrath.modules.income.dto.IncomeListResponse
 import com.tutu.wrath.modules.income.models.Income
 import com.tutu.wrath.modules.user.models.User
 import com.tutu.wrath.util.Money
+import com.tutu.wrath.util.Rocket
 import io.kvision.core.Container
 import io.kvision.html.Div
+import io.kvision.snabbdom.VNode
 import io.kvision.types.LocalDateTime
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class IncomeTable : Div() {
+class IncomeTable(private val rocket: Rocket) : Div(), CoroutineScope {
+    override val coroutineContext: CoroutineContext = Job()
 
     private val columns = listOf(
         Column("name", "Nome"),
@@ -30,10 +38,23 @@ class IncomeTable : Div() {
     init {
         table(header = "Entradas", columns = columns, rows = incomes.map { Row(it) })
     }
+
+    override fun afterInsert(node: VNode) {
+        initialize()
+    }
+
+    private fun initialize() {
+        launch {
+            val response = rocket.get<IncomeListResponse>("ebisu/incomes")
+            console.log(response)
+        }
+    }
+
 }
 
-fun Container.incomeTable() : IncomeTable {
-    val component = IncomeTable()
+fun Container.incomeTable(rocket: Rocket) : IncomeTable {
+    val component = IncomeTable(rocket)
     this.add(component)
     return component
 }
+

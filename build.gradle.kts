@@ -81,6 +81,8 @@ kotlin {
         implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
         implementation("io.kvision:kvision-i18n:$kvisionVersion")
         implementation("io.kvision:kvision-rest:$kvisionVersion")
+        implementation("io.kvision:kvision-state-flow:$kvisionVersion")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4")
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
