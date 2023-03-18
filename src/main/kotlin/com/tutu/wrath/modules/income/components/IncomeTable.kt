@@ -3,23 +3,18 @@ package com.tutu.wrath.modules.income.components
 import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.table
-import com.tutu.wrath.modules.accounting.models.Frequency
-import com.tutu.wrath.modules.income.dto.IncomeListResponse
 import com.tutu.wrath.modules.income.models.Income
-import com.tutu.wrath.modules.user.models.User
-import com.tutu.wrath.util.Money
-import com.tutu.wrath.util.Rocket
+import com.tutu.wrath.modules.income.usecases.GetIncomeUseCase
+import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
 import io.kvision.html.Div
 import io.kvision.snabbdom.VNode
-import io.kvision.types.LocalDateTime
+import io.kvision.state.ObservableValue
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
-class IncomeTable(private val rocket: Rocket) : Div(), CoroutineScope {
-    override val coroutineContext: CoroutineContext = Job()
+class IncomeTable(private val useCase: GetIncomeUseCase) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val columns = listOf(
         Column("name", "Nome"),
@@ -27,33 +22,32 @@ class IncomeTable(private val rocket: Rocket) : Div(), CoroutineScope {
         Column("origin", "Origem")
     )
 
-    private val incomes = listOf(
-        Income(name = "Teste", amount = Money(amount = 1110), origin = User("Teste"), data = LocalDateTime(), frequency = Frequency.ONCE),
-        Income(name = "Teste 1", amount = Money(amount = 31330), origin = User("Teste"), data = LocalDateTime(), frequency = Frequency.MONTHLY),
-        Income(name = "Teste 2", amount = Money(amount = 0), origin = User("Teste"), data = LocalDateTime(), frequency = Frequency.DAILY),
-        Income(name = "Teste 3", amount = Money(amount = 10), origin = User("Teste"), data = LocalDateTime(), frequency = Frequency.QUARTELY),
-        Income(name = "Teste 4", amount = Money(amount = 130), origin = User("Teste"), data = LocalDateTime(), frequency = Frequency.WEEKLY),
-    )
+    private val incomes = ObservableValue(emptyList<Income>())
+    private val rows = ObservableValue(emptyList<Row>())
 
     init {
-        table(header = "Entradas", columns = columns, rows = incomes.map { Row(it) })
+        table(header = "Entradas", columns = columns, rows = rows)
     }
 
     override fun afterInsert(node: VNode) {
+        setHooks()
         initialize()
+    }
+
+    private fun setHooks() {
+        incomes.subscribe { incomes -> rows.setState(incomes.map { Row(it) }) }
     }
 
     private fun initialize() {
         launch {
-            val response = rocket.get<IncomeListResponse>("ebisu/incomes")
-            console.log(response)
+            incomes.setState(useCase.getIncome().unwrap(emptyList()))
         }
     }
 
 }
 
-fun Container.incomeTable(rocket: Rocket) : IncomeTable {
-    val component = IncomeTable(rocket)
+fun Container.incomeTable(getIncomeUseCase: GetIncomeUseCase) : IncomeTable {
+    val component = IncomeTable(getIncomeUseCase)
     this.add(component)
     return component
 }

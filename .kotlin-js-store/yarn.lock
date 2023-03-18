@@ -951,14 +951,6 @@ dom-serialize@^2.2.1:
     extend "^3.0.0"
     void-elements "^2.0.0"
 
-dukat@0.5.8-rc.3:
-  version "0.5.8-rc.3"
-  resolved "https://registry.yarnpkg.com/dukat/-/dukat-0.5.8-rc.3.tgz#4a2b848b9d2978cb610af8d5cf24ff5e5a408743"
-  integrity sha512-wzl9A5alTT1Mag4y7bUVjPF4L/wkts7AiiWxe6/6tL5gSDowexUzlJX/pYVTbnHcOo48/bok3Ao1gzU4/cFFjw==
-  dependencies:
-    google-protobuf "3.12.2"
-    typescript "3.9.5"
-
 dukat@0.5.8-rc.4:
   version "0.5.8-rc.4"
   resolved "https://registry.yarnpkg.com/dukat/-/dukat-0.5.8-rc.4.tgz#90384dcb50b14c26f0e99dae92b2dea44f5fce21"
@@ -1690,11 +1682,6 @@ jest-worker@^27.4.5:
     "@types/node" "*"
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
-
-jquery@^3.5.1:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.4.tgz#ba065c188142100be4833699852bf7c24dc0252f"
-  integrity sha512-v28EW9DWDFpzcD9O5iyJXg3R3+q+mET5JhnjJzQUZMHOv67bpSIHq81GEYpPNZHG+XXHsfSme3nxp/hndKEcsQ==
 
 js-yaml@4.1.0:
   version "4.1.0"
@@ -2790,6 +2777,11 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+toastify-js@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/toastify-js/-/toastify-js-1.12.0.tgz#cc1c4f5c7e7380e854e20bedceb51980ea29f64d"
+  integrity sha512-HeMHCO9yLPvP9k0apGSdPUWrUbLnxUKNFzgUoZp1PHCLploIX/4DSQ7V8H25ef+h4iO9n0he7ImfcndnN6nDrQ==
 
 toidentifier@1.0.1:
   version "1.0.1"

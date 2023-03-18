@@ -14,3 +14,13 @@ table tr td {
 table tr td:first-child {
   text-align: left !important;
 }
+
+.kv-toastify-danger {
+  background: hsl(var(--er)/var(--tw-bg-opacity));
+  color: hsl(var(--erc,var(--nc))/var(--tw-text-opacity));
+  display: flex;
+}
+
+.kv-toastify-danger svg {
+  margin-top: 0.042rem;
+}

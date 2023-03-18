@@ -27,8 +27,8 @@ task("pre-build") {
     if (System.getProperty("os.name").toLowerCaseAsciiOnly().contains("windows")) {
         println("Executando tailwindcss")
         exec {
-            executable("whoami")
-            args("-o", "./src/main/resources/css/main.css", "--watch")
+            executable("./tailwind")
+            args("-o", "./src/main/resources/css/main.css")
         }
     }
 }
@@ -81,12 +81,13 @@ kotlin {
         implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
         implementation("io.kvision:kvision-i18n:$kvisionVersion")
         implementation("io.kvision:kvision-rest:$kvisionVersion")
+        implementation("io.kvision:kvision-state:$kvisionVersion")
+        implementation("io.kvision:kvision-toastify:$kvisionVersion")
         implementation("io.kvision:kvision-state-flow:$kvisionVersion")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4")
     }
     sourceSets["test"].dependencies {
-        implementation(kotlin("test-js"))
-        implementation("io.kvision:kvision-testutils:$kvisionVersion")
+
     }
     sourceSets["main"].resources.srcDir(webDir)
 }

@@ -17,7 +17,7 @@ fun Container.main(manager: Manager) {
         }
 
         div(className = "flex-row py-4"){
-            incomeTable(manager.rocket)
+            incomeTable(manager.incomeManager.getIncomeUseCase)
         }
     }
 }

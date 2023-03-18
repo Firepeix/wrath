@@ -2,12 +2,8 @@ package com.tutu.wrath
 
 import com.tutu.wrath.anger.layout.header
 import com.tutu.wrath.util.Manager
-import io.kvision.Application
-import io.kvision.CoreModule
-import io.kvision.module
+import io.kvision.*
 import io.kvision.panel.root
-import io.kvision.require
-import io.kvision.startApplication
 import com.tutu.wrath.anger.layout.main as mainApp
 
 class App : Application() {
@@ -44,5 +40,6 @@ class App : Application() {
 }
 
 fun main() {
-    startApplication(::App, module.hot, CoreModule, )
+    startApplication(::App, module.hot, CoreModule, ToastifyModule)
 }
+
