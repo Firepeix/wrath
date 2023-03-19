@@ -1,6 +1,10 @@
 package com.tutu.wrath.util
 
+import com.tutu.wrath.anger.display.Display
 import io.kvision.core.Color
+import io.kvision.core.CssSize
+import io.kvision.core.FontWeight
+import io.kvision.core.UNIT
 
 data class Money(private val amount: Int) {
 
@@ -17,15 +21,21 @@ data class Money(private val amount: Int) {
         return Money(replace("/\\D/", "").toInt() * sign)
     }
 
-    fun display(): String {
-        return toReal()
+    fun display(highlight: Boolean = false): Display {
+        val content = toReal()
+        return if (!highlight) Display(content) else Display(
+            content = content,
+            color = color,
+            weight = FontWeight.BOLD,
+            size = CssSize(1.2, UNIT.rem)
+        )
     }
 
     fun toReal(showSign: Boolean = true): String {
-        if (amount == 0) return "R$ 00,00"
+        if (amount == 0) return "R$ 0,00"
         val isInCents = amount > -100 && amount < 100
         val sign = if (showSign && amount < 0) "-" else ""
-        val cents = if (isInCents) "00" else ""
+        val cents = if (isInCents) "0" else ""
         val wholeNumber = wholeNumber()
         return "$sign R$ $wholeNumber$cents,${reversedAmount.slice(0 .. 1)}"
     }

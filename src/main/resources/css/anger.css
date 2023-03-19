@@ -24,3 +24,9 @@ table tr td:first-child {
 .kv-toastify-danger svg {
   margin-top: 0.042rem;
 }
+
+.table :where(th, td) {
+  white-space: inherit;
+  padding: 1rem;
+  vertical-align: middle;
+}

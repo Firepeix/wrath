@@ -4,7 +4,7 @@ import com.tutu.wrath.modules.card.credit.usecases.GetCreditSummaryUseCase
 import com.tutu.wrath.util.Rocket
 
 class CardManager(rocket: Rocket) {
-    //private val incomeMapper = IncomeMapper()
-    //private val incomeRepository = IncomeRepository(rocket, incomeMapper)
-    val getCreditSummaryUseCase = GetCreditSummaryUseCase()
+    private val mapper = CardMapper()
+    private val repository = CardRepository(rocket, mapper)
+    val getCreditSummaryUseCase = GetCreditSummaryUseCase(repository)
 }

@@ -1,5 +1,6 @@
 package com.tutu.wrath.modules.income.models
 
+import com.tutu.wrath.anger.display.Display
 import com.tutu.wrath.anger.tables.RowValue
 import com.tutu.wrath.modules.accounting.models.Account
 import com.tutu.wrath.modules.accounting.models.Frequency
@@ -14,12 +15,12 @@ data class Income(
     val frequency: Frequency
 ) : RowValue {
 
-    override fun getRowValue(id: String): String {
+    override fun getRowValue(id: String): Display {
         return when(id) {
-            "name" -> name
+            "name" -> Display(name)
             "amount" -> amount.display()
-            "origin" -> origin.getName()
-            else -> "-"
+            "origin" -> Display(origin.getName())
+            else -> super.getRowValue(id)
         }
     }
 }

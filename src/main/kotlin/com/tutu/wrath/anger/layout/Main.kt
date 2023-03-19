@@ -17,7 +17,7 @@ fun Container.main(manager: Manager) {
             }
         }
 
-        div(className = "flex-row py-4"){
+        div(className = "grid gap-4 grid-cols-3"){
             incomeTable(manager.incomeManager.getIncomeUseCase)
             creditSummaryTable(manager.cardManager.getCreditSummaryUseCase)
         }

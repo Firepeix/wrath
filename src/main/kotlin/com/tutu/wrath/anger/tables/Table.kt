@@ -16,7 +16,12 @@ fun Container.table(columns: List<Column>, rows: ObservableValue<List<Row>>, hea
             it.forEach { row ->
                 row(className = "hover") {
                     columns.forEach { column ->
-                        cell(row.getRowValue(column.id))
+                        val display = row.getRowValue(column.id)
+                        cell(display.content) {
+                            fontWeight = display.weight
+                            color = display.fontColor
+                            fontSize = display.size
+                        }
                     }
                 }
             }

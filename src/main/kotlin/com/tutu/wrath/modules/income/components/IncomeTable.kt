@@ -7,6 +7,8 @@ import com.tutu.wrath.modules.income.models.Income
 import com.tutu.wrath.modules.income.usecases.GetIncomeUseCase
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
+import io.kvision.core.Display
+import io.kvision.core.Overflow
 import io.kvision.html.Div
 import io.kvision.snabbdom.VNode
 import io.kvision.state.ObservableValue
@@ -27,6 +29,8 @@ class IncomeTable(private val useCase: GetIncomeUseCase) : Div(), CoroutineScope
 
     init {
         table(header = "Entradas", columns = columns, rows = rows)
+        overflow = Overflow.SCROLL
+        display = Display.TABLE
     }
 
     override fun afterInsert(node: VNode) {
