@@ -15,7 +15,7 @@ data class Income(
     val frequency: Frequency
 ) : RowValue {
 
-    override fun getRowValue(id: String): Display {
+    override fun getRowValue(id: String, position: Int): Display {
         return when(id) {
             "name" -> Display(name)
             "amount" -> amount.display()

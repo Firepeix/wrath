@@ -4,6 +4,7 @@ import com.tutu.wrath.anger.button.secondaryButton
 import com.tutu.wrath.anger.card.pageHeading
 import com.tutu.wrath.modules.card.credit.components.creditSummaryTable
 import com.tutu.wrath.modules.income.components.incomeTable
+import com.tutu.wrath.modules.user.components.userBalanceTable
 import com.tutu.wrath.util.Manager
 import io.kvision.core.Container
 import io.kvision.html.div
@@ -17,9 +18,10 @@ fun Container.main(manager: Manager) {
             }
         }
 
-        div(className = "grid gap-4 grid-cols-3"){
+        div(className = "grid gap-4 grid-cols-3 py-4"){
             incomeTable(manager.incomeManager.getIncomeUseCase)
             creditSummaryTable(manager.cardManager.getCreditSummaryUseCase)
+            userBalanceTable(manager.userManager.useCase)
         }
     }
 }

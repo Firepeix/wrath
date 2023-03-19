@@ -30,3 +30,19 @@ table tr td:first-child {
   padding: 1rem;
   vertical-align: middle;
 }
+
+.header-mode {
+  margin-bottom: 0;
+}
+
+.header-mode .ts-control {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: none;
+}
+
+.ts-control {
+  outline: none !important;
+}

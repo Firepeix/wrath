@@ -14,7 +14,7 @@ data class CreditSummary(
     val planned: Money,
     val difference: Money
 ) : RowValue {
-    override fun getRowValue(id: String): Display {
+    override fun getRowValue(id: String, position: Int): Display {
         return when(id) {
             "card.name" -> Display(card.name, color = card.color, weight = FontWeight.BOLD, size = CssSize(1.2, UNIT.rem))
             "spent" -> spent.display()

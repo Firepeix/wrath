@@ -1,7 +1,6 @@
 package com.tutu.wrath.anger.tables
 
 import io.kvision.core.Container
-import io.kvision.html.div
 import io.kvision.html.tbody
 import io.kvision.html.td
 import io.kvision.html.th
@@ -11,15 +10,13 @@ import io.kvision.state.ObservableValue
 import io.kvision.state.bind
 import io.kvision.html.table as baseTable
 
-fun Container.table(columns: List<Column>, rows: ObservableValue<List<Row>>, header: String? = null) {
-    header?.let { tableHeader(it) }
-
+fun Container.verticalTable(columns: List<Column>, rows: ObservableValue<List<Row>>) {
     baseTable(className = "w-full table") {
         thead {
             tr {
                 columns.forEach {
                     th(it.label) {
-                        setAttribute("colspan", it.colspan.toString())
+                        setAttribute("colspan", "2")
                     }
                 }
             }
@@ -44,8 +41,4 @@ fun Container.table(columns: List<Column>, rows: ObservableValue<List<Row>>, hea
             }
         }
     }
-}
-
-fun Container.tableHeader(header: String) {
-    div(header, className = "w-full bg-neutral p-4 text-center font-bold rounded-t")
 }

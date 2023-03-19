@@ -1,6 +1,6 @@
 package com.tutu.wrath.modules.income.dto
 
-import com.tutu.wrath.modules.accounting.models.Account
+import com.tutu.wrath.modules.accounting.dto.AccountResponse
 import com.tutu.wrath.modules.accounting.models.Frequency
 import kotlinx.serialization.Serializable
 
@@ -14,5 +14,5 @@ data class IncomeResponse(
     val amount: Int,
     val date: String,
     val frequency: Frequency,
-    val source: Account
+    val source: AccountResponse
 )

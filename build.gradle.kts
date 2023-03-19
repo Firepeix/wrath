@@ -78,12 +78,12 @@ kotlin {
     }
     sourceSets["main"].dependencies {
         implementation("io.kvision:kvision:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
         implementation("io.kvision:kvision-i18n:$kvisionVersion")
         implementation("io.kvision:kvision-rest:$kvisionVersion")
         implementation("io.kvision:kvision-state:$kvisionVersion")
         implementation("io.kvision:kvision-toastify:$kvisionVersion")
         implementation("io.kvision:kvision-state-flow:$kvisionVersion")
+        implementation("io.kvision:kvision-tom-select:$kvisionVersion")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4")
     }
     sourceSets["test"].dependencies {
