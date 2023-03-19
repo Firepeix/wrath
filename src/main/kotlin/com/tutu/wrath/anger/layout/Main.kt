@@ -2,6 +2,7 @@ package com.tutu.wrath.anger.layout
 
 import com.tutu.wrath.anger.button.secondaryButton
 import com.tutu.wrath.anger.card.pageHeading
+import com.tutu.wrath.modules.card.credit.components.creditSummaryTable
 import com.tutu.wrath.modules.income.components.incomeTable
 import com.tutu.wrath.util.Manager
 import io.kvision.core.Container
@@ -18,6 +19,7 @@ fun Container.main(manager: Manager) {
 
         div(className = "flex-row py-4"){
             incomeTable(manager.incomeManager.getIncomeUseCase)
+            creditSummaryTable(manager.cardManager.getCreditSummaryUseCase)
         }
     }
 }
