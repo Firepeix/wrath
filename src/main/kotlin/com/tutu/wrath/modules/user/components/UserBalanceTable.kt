@@ -8,8 +8,6 @@ import com.tutu.wrath.modules.user.model.UserBalance
 import com.tutu.wrath.modules.user.usecases.UserUseCase
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
-import io.kvision.core.Display
-import io.kvision.core.Overflow
 import io.kvision.core.StringPair
 import io.kvision.html.Div
 import io.kvision.snabbdom.VNode
@@ -32,8 +30,8 @@ class UserBalanceTable(private val useCase: UserUseCase) : Div(), CoroutineScope
     private val userId: ObservableValue<String?> = ObservableValue(null)
 
     init {
-        display = Display.TABLE
-        overflow = Overflow.SCROLL
+        //display = Display.TABLE
+        //overflow = Overflow.SCROLL
 
         balanceTableHeader(userId, userOptions)
         table(columns, rows)

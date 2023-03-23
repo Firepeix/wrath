@@ -27,7 +27,7 @@ data class Money(private val amount: Int) {
             content = content,
             color = color,
             weight = FontWeight.BOLD,
-            size = CssSize(1.2, UNIT.rem)
+            size = CssSize(1, UNIT.rem)
         )
     }
 

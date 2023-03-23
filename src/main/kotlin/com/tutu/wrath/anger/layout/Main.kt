@@ -1,6 +1,6 @@
 package com.tutu.wrath.anger.layout
 
-import com.tutu.wrath.anger.button.secondaryButton
+import com.tutu.wrath.anger.button.primaryCTAButton
 import com.tutu.wrath.anger.card.pageHeading
 import com.tutu.wrath.modules.card.credit.components.creditSummaryTable
 import com.tutu.wrath.modules.income.components.incomeTable
@@ -13,7 +13,7 @@ import io.kvision.html.main as baseMain
 fun Container.main(manager: Manager) {
     baseMain(className = "p-8 px-4") {
         pageHeading("Despesas") {
-            secondaryButton("Ver Resumo") {
+            primaryCTAButton("Ver Resumo") {
                 console.log("asd")
             }
         }

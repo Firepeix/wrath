@@ -1,11 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/main/resources/css/app.css",
     "./src/main/kotlin/**/*.{html,js,kt}",
     "./src/main/web/*.{html,js,kt}",
+    "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
+   fontFamily: {
+          sans: ["Roboto", "sans-serif"],
+          body: ["Roboto", "sans-serif"],
+          mono: ["ui-monospace", "monospace"],
+        },
     extend: {},
   },
   daisyui: {
@@ -25,5 +32,5 @@ module.exports = {
           },
         ],
       },
-  plugins: [require("daisyui")],
+  plugins: [require("tw-elements/dist/plugin")],
 }

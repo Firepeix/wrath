@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
-import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 plugins {
     val kotlinVersion: String by System.getProperties()
@@ -23,15 +22,15 @@ val kvisionVersion: String by System.getProperties()
 
 val webDir = file("src/main/web")
 
-task("pre-build") {
-    if (System.getProperty("os.name").toLowerCaseAsciiOnly().contains("windows")) {
-        println("Executando tailwindcss")
-        exec {
-            executable("./tailwind")
-            args("-o", "./src/main/resources/css/main.css")
-        }
-    }
-}
+//task("pre-build") {
+//    if (System.getProperty("os.name").toLowerCaseAsciiOnly().contains("windows")) {
+//        println("Executando tailwindcss")
+//        exec {
+//            executable("./tailwind")
+//            args("-o", "./src/main/resources/css/main.css")
+//        }
+//    }
+//}
 
 
 kotlin {

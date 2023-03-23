@@ -1,3 +1,7 @@
+table {
+  font-size: 14px;
+}
+
 table tr th {
   text-align: right;
   border-radius: 0 !important;
@@ -25,24 +29,28 @@ table tr td:first-child {
   margin-top: 0.042rem;
 }
 
-.table :where(th, td) {
-  white-space: inherit;
-  padding: 1rem;
-  vertical-align: middle;
-}
+/*.table :where(th, td) {*/
+/*  white-space: inherit;*/
+/*  padding: 1rem;*/
+/*  vertical-align: middle;*/
+/*}*/
+/**/
+/*.header-mode {*/
+/*  margin-bottom: 0;*/
+/*}*/
+/**/
+/*.header-mode .ts-control {*/
+/*  border-top-left-radius: 0;*/
+/*  border-top-right-radius: 0;*/
+/*  border-bottom-left-radius: 0;*/
+/*  border-bottom-right-radius: 0;*/
+/*  border: none;*/
+/*}*/
+/**/
+/*.ts-control {*/
+/*  outline: none !important;*/
+/*}*/
 
-.header-mode {
-  margin-bottom: 0;
-}
-
-.header-mode .ts-control {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border: none;
-}
-
-.ts-control {
-  outline: none !important;
+.shadow-md-strong {
+    box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;
 }

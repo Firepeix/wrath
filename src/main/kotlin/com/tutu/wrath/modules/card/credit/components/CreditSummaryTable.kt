@@ -7,8 +7,6 @@ import com.tutu.wrath.modules.card.credit.model.CreditSummary
 import com.tutu.wrath.modules.card.credit.usecases.GetCreditSummaryUseCase
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
-import io.kvision.core.Display
-import io.kvision.core.Overflow
 import io.kvision.html.Div
 import io.kvision.snabbdom.VNode
 import io.kvision.state.ObservableValue
@@ -30,8 +28,8 @@ class CreditSummaryTable(private val useCase: GetCreditSummaryUseCase) : Div(), 
 
     init {
         table(header = "Resumo Compras", columns = columns, rows = rows)
-        display = Display.TABLE
-        overflow = Overflow.SCROLL
+        //display = Display.TABLE
+        //overflow = Overflow.SCROLL
     }
 
     override fun afterInsert(node: VNode) {
