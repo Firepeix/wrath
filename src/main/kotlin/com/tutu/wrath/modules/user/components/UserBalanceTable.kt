@@ -5,7 +5,6 @@ import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.table
 import com.tutu.wrath.modules.user.model.User
 import com.tutu.wrath.modules.user.model.UserBalance
-import com.tutu.wrath.modules.user.usecases.UserUseCase
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
 import io.kvision.core.StringPair
@@ -16,7 +15,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UserBalanceTable(private val useCase: UserUseCase) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+typealias GetFriends = suspend () -> Result<List<User>>
+typealias GetBalance = suspend (userId: String) -> Result<UserBalance>
+typealias CalculateBalance = (balance: UserBalance) -> List<Row>
+
+class UserBalanceTable(
+    private val getFriends: GetFriends,
+    private val getBalance: GetBalance,
+    private val calculateBalance: CalculateBalance,
+) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val columns = listOf(
         Column("pay", "A Pagar", colspan = 2),
@@ -30,9 +37,6 @@ class UserBalanceTable(private val useCase: UserUseCase) : Div(), CoroutineScope
     private val userId: ObservableValue<String?> = ObservableValue(null)
 
     init {
-        //display = Display.TABLE
-        //overflow = Overflow.SCROLL
-
         balanceTableHeader(userId, userOptions)
         table(columns, rows)
     }
@@ -44,27 +48,33 @@ class UserBalanceTable(private val useCase: UserUseCase) : Div(), CoroutineScope
 
     private fun setHooks() {
         users.subscribe { users ->
-            users.firstOrNull()?.let { getBalance(it.id) }
+            users.firstOrNull()?.let { setBalance(it.id) }
             userOptions.setState(users.map { it.id to it.name })
         }
 
-        userId.subscribe { id -> if(id != null) getBalance(id)  }
+        userId.subscribe { id -> if(id != null) setBalance(id)  }
+
+        balance.subscribe { if(it != null)  calculateBalance(it) }
     }
 
     private fun initialize() {
         launch {
-            users.setState(useCase.getFriends().unwrap(emptyList()))
+            users.setState(getFriends().unwrap(emptyList()))
         }
     }
 
-    private fun getBalance(userId: String?) {
-        console.log(userId)
+    private fun setBalance(userId: String?) {
+        launch {
+            userId?.let {
+                balance.setState(getBalance(it).unwrap(null))
+            }
+        }
     }
 
 }
 
-fun Container.userBalanceTable(useCase: UserUseCase) : UserBalanceTable {
-    val component = UserBalanceTable(useCase)
+fun Container.userBalanceTable(getFriends: GetFriends, getBalance: GetBalance, calculateBalance: CalculateBalance) : UserBalanceTable {
+    val component = UserBalanceTable(getFriends, getBalance, calculateBalance)
     this.add(component)
     return component
 }

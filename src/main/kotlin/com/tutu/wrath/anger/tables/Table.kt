@@ -11,7 +11,7 @@ fun Div.table(columns: List<Column>, rows: ObservableValue<List<Row>>, header: S
     header?.let { tableHeader(it) }
 
     div(className = "flex flex-col overflow-x-auto dark:text-neutral-100") {
-        div(className = "inline-block min-w-full py-2 dark:py-0") {
+        div(className = "inline-block min-w-full") {
             baseTable(className = "min-w-full text-center text-sm font-light dark:border-neutral-500 border-t dark:border-none") {
                 thead(className = "font-medium dark:border-neutral-500") {
                     tr(className = "border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600") {
@@ -47,5 +47,5 @@ fun Div.table(columns: List<Column>, rows: ObservableValue<List<Row>>, header: S
 }
 
 fun Container.tableHeader(header: String) {
-    div(header, className = "w-full bg-neutral p-4 text-center font-bold rounded-t dark:text-neutral-100 dark:bg-neutral-700")
+    div(header, className = "w-full bg-neutral p-3 text-center font-bold rounded-t dark:text-neutral-100 dark:bg-neutral-700")
 }
