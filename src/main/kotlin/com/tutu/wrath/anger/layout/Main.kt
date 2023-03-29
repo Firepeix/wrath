@@ -21,7 +21,7 @@ fun Container.main(manager: Manager) {
         div(className = "grid gap-4 grid-cols-3 py-4"){
             incomeTable(manager.incomeManager.getIncomeUseCase)
             creditSummaryTable(manager.cardManager.getCreditSummaryUseCase)
-            userBalanceTable(manager.userManager.useCase::getFriends, manager.userManager.balanceUseCase::getBalance, manager.userManager.balanceUseCase::calculateBalance)
+            userBalanceTable(manager.userManager.useCase::getFriends, manager.userManager.balanceUseCase::getBalance, manager.userManager.balanceUseCase::createRows)
         }
     }
 }

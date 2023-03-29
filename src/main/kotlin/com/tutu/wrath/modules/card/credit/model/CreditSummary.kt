@@ -19,7 +19,7 @@ data class CreditSummary(
             "card.name" -> Display(card.name, color = card.color, weight = FontWeight.BOLD, size = CssSize(1.2, UNIT.rem))
             "spent" -> spent.display()
             "planned" -> planned.display()
-            "difference" -> difference.display(true)
+            "difference" -> difference.highlight()
             else -> super.getRowValue(id)
         }
     }

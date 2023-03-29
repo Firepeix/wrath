@@ -1664,6 +1664,10 @@ video {
   border-top-width: 1px;
 }
 
+.border-l {
+  border-left-width: 1px;
+}
+
 .\!border-solid {
   border-style: solid !important;
 }
@@ -1851,6 +1855,21 @@ video {
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
 }
 
+.bg-info {
+  --tw-bg-opacity: 1;
+  background-color: rgb(84 180 211 / var(--tw-bg-opacity));
+}
+
+.bg-info-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(158 212 230 / var(--tw-bg-opacity));
+}
+
+.bg-info-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(182 223 236 / var(--tw-bg-opacity));
+}
+
 .bg-contain {
   background-size: contain;
 }
@@ -1891,6 +1910,10 @@ video {
   padding: 0.625rem;
 }
 
+.p-3 {
+  padding: 0.75rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -1905,10 +1928,6 @@ video {
 
 .p-\[auto\] {
   padding: auto;
-}
-
-.p-3 {
-  padding: 0.75rem;
 }
 
 .\!py-0 {
@@ -2802,6 +2821,21 @@ video {
   background-color: rgb(48 97 175 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-info-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(182 223 236 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-info:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(84 180 211 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-info-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(158 212 230 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-opacity-10:hover {
   --tw-bg-opacity: 0.1;
 }
@@ -3538,6 +3572,11 @@ video {
   border-color: rgb(143 174 224 / var(--tw-border-opacity));
 }
 
+.dark .dark\:border-info-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(121 196 220 / var(--tw-border-opacity));
+}
+
 .dark .dark\:bg-neutral-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(82 82 82 / var(--tw-bg-opacity));
@@ -3581,13 +3620,13 @@ video {
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
 }
 
-.dark .dark\:fill-gray-400 {
-  fill: #9ca3af;
+.dark .dark\:bg-info {
+  --tw-bg-opacity: 1;
+  background-color: rgb(84 180 211 / var(--tw-bg-opacity));
 }
 
-.dark .dark\:py-0 {
-  padding-top: 0px;
-  padding-bottom: 0px;
+.dark .dark\:fill-gray-400 {
+  fill: #9ca3af;
 }
 
 .dark .dark\:pt-2 {
@@ -3664,6 +3703,11 @@ video {
 
 .dark .dark\:hover\:bg-white\/30:hover {
   background-color: rgb(255 255 255 / 0.3);
+}
+
+.dark .dark\:hover\:bg-info-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(52 164 202 / var(--tw-bg-opacity));
 }
 
 .dark .dark\:hover\:fill-gray-100:hover {

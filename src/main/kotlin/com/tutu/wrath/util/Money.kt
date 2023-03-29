@@ -7,13 +7,21 @@ import io.kvision.core.FontWeight
 import io.kvision.core.UNIT
 
 data class Money(private val amount: Int) {
+    
+    enum class Sign { POSITIVE, NEUTRAL, NEGATIVE }
 
-    val reversedAmount = amount.toString().reversed()
+    private val reversedAmount = amount.toString().reversed()
 
-    val color = when {
-        amount > 0 -> Color("#21BA45")
-        amount == 0 -> Color("#1976D2")
-        else -> Color("#C10015")
+    val sign = when {
+        amount > 0 -> Sign.POSITIVE
+        amount == 0 -> Sign.NEUTRAL
+        else -> Sign.NEGATIVE
+    }
+
+    val color = when(sign) {
+        Sign.POSITIVE -> Color("#21BA45")
+        Sign.NEUTRAL -> Color("#1976D2")
+        Sign.NEGATIVE -> Color("#C10015")
     }
 
     fun String.parse(): Money {
@@ -21,10 +29,13 @@ data class Money(private val amount: Int) {
         return Money(replace("/\\D/", "").toInt() * sign)
     }
 
-    fun display(highlight: Boolean = false): Display {
-        val content = toReal()
-        return if (!highlight) Display(content) else Display(
-            content = content,
+    fun display(): Display {
+        return Display(toReal())
+    }
+
+    fun highlight(): Display {
+        return Display(
+            content = toReal(),
             color = color,
             weight = FontWeight.BOLD,
             size = CssSize(1, UNIT.rem)

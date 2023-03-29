@@ -8,7 +8,7 @@ table tr th {
 }
 
 table tr th:first-child {
-  text-align: left !important;
+  text-align: left;
 }
 
 table tr td {

@@ -1,13 +1,17 @@
 package com.tutu.wrath.modules.user.components
 
+import com.tutu.wrath.anger.display.Display
 import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.table
 import com.tutu.wrath.modules.user.model.User
 import com.tutu.wrath.modules.user.model.UserBalance
+import com.tutu.wrath.util.Money
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
+import io.kvision.core.CssSize
 import io.kvision.core.StringPair
+import io.kvision.core.UNIT
 import io.kvision.html.Div
 import io.kvision.snabbdom.VNode
 import io.kvision.state.ObservableValue
@@ -17,28 +21,29 @@ import kotlinx.coroutines.launch
 
 typealias GetFriends = suspend () -> Result<List<User>>
 typealias GetBalance = suspend (userId: String) -> Result<UserBalance>
-typealias CalculateBalance = (balance: UserBalance) -> List<Row>
+typealias CreateRows = (balance: UserBalance) -> List<Row>
+
 
 class UserBalanceTable(
     private val getFriends: GetFriends,
     private val getBalance: GetBalance,
-    private val calculateBalance: CalculateBalance,
+    private val createRows: CreateRows,
 ) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val columns = listOf(
-        Column("pay", "A Pagar", colspan = 2),
-        Column("receive", "A Receber", colspan = 2),
+        Column("payExpense", "A Pagar", colspan = 2),
+        Column("receiveExpense", "A Receber", colspan = 2),
     )
 
-    private val balance: ObservableValue<UserBalance?> = ObservableValue(null)
+    private val balance: ObservableValue<Pair<User?, UserBalance?>> = ObservableValue(Pair<User?, UserBalance?>(null, null))
     private val rows = ObservableValue(emptyList<Row>())
     private val users = ObservableValue(emptyList<User>())
-    private val userOptions = ObservableValue(emptyList<StringPair>())
-    private val userId: ObservableValue<String?> = ObservableValue(null)
+    private val chosenUser: ObservableValue<User?> = ObservableValue(null)
+    private val summary: ObservableValue<Display?> = ObservableValue(null)
 
     init {
-        balanceTableHeader(userId, userOptions)
-        table(columns, rows)
+        balanceTableHeader(chosenUser, users)
+        table(columns, rows, footer = summary)
     }
 
     override fun afterInsert(node: VNode) {
@@ -47,14 +52,16 @@ class UserBalanceTable(
     }
 
     private fun setHooks() {
-        users.subscribe { users ->
-            users.firstOrNull()?.let { setBalance(it.id) }
-            userOptions.setState(users.map { it.id to it.name })
+        users.subscribe { users ->  users.firstOrNull()?.let { setBalance(it) } }
+
+        chosenUser.subscribe { if(it != null) setBalance(it)  }
+
+        balance.subscribe { (user, balance) ->
+            if(user != null && balance != null)  {
+                rows.setState(createRows(balance))
+                summary.setState(createSummary(user, balance))
+            }
         }
-
-        userId.subscribe { id -> if(id != null) setBalance(id)  }
-
-        balance.subscribe { if(it != null)  calculateBalance(it) }
     }
 
     private fun initialize() {
@@ -63,17 +70,28 @@ class UserBalanceTable(
         }
     }
 
-    private fun setBalance(userId: String?) {
+    private fun setBalance(user: User) {
         launch {
-            userId?.let {
-                balance.setState(getBalance(it).unwrap(null))
-            }
+            balance.setState(user to getBalance(user.id).unwrap(null))
         }
     }
 
+    private fun createSummary(user: User, userBalance: UserBalance): Display {
+        val legend = when(userBalance.totalAmount.sign) {
+            Money.Sign.POSITIVE -> "Receber de"
+            Money.Sign.NEUTRAL -> "Não realizar operação com"
+            Money.Sign.NEGATIVE -> "Enviar para"
+        }
+
+
+       return userBalance.totalAmount.highlight().copy(
+           content = "$legend ${user.name}: ${userBalance.totalAmount.toReal()}",
+           size = CssSize(1.3, UNIT.rem)
+       )
+    }
 }
 
-fun Container.userBalanceTable(getFriends: GetFriends, getBalance: GetBalance, calculateBalance: CalculateBalance) : UserBalanceTable {
+fun Container.userBalanceTable(getFriends: GetFriends, getBalance: GetBalance, calculateBalance: CreateRows) : UserBalanceTable {
     val component = UserBalanceTable(getFriends, getBalance, calculateBalance)
     this.add(component)
     return component
