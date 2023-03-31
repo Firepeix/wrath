@@ -28,8 +28,6 @@ class CreditSummaryTable(private val useCase: GetCreditSummaryUseCase) : Div(), 
 
     init {
         table(header = "Resumo Compras", columns = columns, rows = rows)
-        //display = Display.TABLE
-        //overflow = Overflow.SCROLL
     }
 
     override fun afterInsert(node: VNode) {
