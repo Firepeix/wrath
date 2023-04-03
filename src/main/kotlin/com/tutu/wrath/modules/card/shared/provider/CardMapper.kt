@@ -1,8 +1,10 @@
 package com.tutu.wrath.modules.card.shared.provider
 
+import com.tutu.wrath.modules.card.credit.dto.CreditSummaryResponse
 import com.tutu.wrath.modules.card.credit.model.CreditSummary
+import com.tutu.wrath.modules.card.debit.dto.DebitSummaryResponse
+import com.tutu.wrath.modules.card.debit.model.DebitSummary
 import com.tutu.wrath.modules.card.shared.dto.CardResponse
-import com.tutu.wrath.modules.card.shared.dto.CreditSummaryResponse
 import com.tutu.wrath.modules.card.shared.model.Card
 import com.tutu.wrath.util.Money
 import io.kvision.core.Color
@@ -18,6 +20,18 @@ class CardMapper {
                 difference = Money(amount = it.difference),
             )
         }
+    }
+
+    fun toDebitSummary(source: DebitSummaryResponse): DebitSummary {
+        val (summary) = source
+        return DebitSummary(
+            currentNetAmount = Money(summary.currentAmount),
+            amountToPay = Money(summary.amountToPay),
+            payedAmount = Money(summary.payedAmount),
+            totalAmount = Money(summary.totalAmount),
+            forecastAmount = Money(summary.forecastAmount),
+            currentAmount = Money(summary.currentAmount),
+        )
     }
 
     fun toCard(source: CardResponse): Card {

@@ -4,6 +4,7 @@ import com.tutu.wrath.anger.button.primaryCTAButton
 import com.tutu.wrath.anger.card.pageHeading
 import com.tutu.wrath.anger.modal.modal
 import com.tutu.wrath.modules.card.credit.components.creditSummaryTable
+import com.tutu.wrath.modules.card.debit.components.debitSummary
 import com.tutu.wrath.modules.income.components.incomeTable
 import com.tutu.wrath.modules.user.components.userBalanceTable
 import com.tutu.wrath.util.Manager
@@ -12,7 +13,11 @@ import io.kvision.html.div
 import io.kvision.html.main as baseMain
 
 fun Container.main(manager: Manager) {
-    val summaryModel = modal("summary-modal")
+    val summaryModel = modal("summary-modal", "Sumario de Debito", noPadding = true) { modal ->
+        debitSummary(manager.cardManager.debitSummaryUseCase::getSummary).also {
+            modal.onDisplay = it::initialize
+        }
+    }
 
     baseMain(className = "p-8 px-4") {
         pageHeading("Despesas") {
@@ -22,7 +27,7 @@ fun Container.main(manager: Manager) {
         div(className = "grid gap-4 grid-cols-3 py-4"){
             incomeTable(manager.incomeManager.getIncomeUseCase)
             creditSummaryTable(manager.cardManager.getCreditSummaryUseCase)
-            userBalanceTable(manager.userManager.useCase::getFriends, manager.userManager.balanceUseCase::getBalance, manager.userManager.balanceUseCase::createRows)
+            userBalanceTable(manager.userManager.useCase::getFriends, manager.userManager.balanceUseCase::getBalance)
         }
 
     }

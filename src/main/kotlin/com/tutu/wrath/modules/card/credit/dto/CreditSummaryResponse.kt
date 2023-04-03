@@ -1,5 +1,6 @@
-package com.tutu.wrath.modules.card.shared.dto
+package com.tutu.wrath.modules.card.credit.dto
 
+import com.tutu.wrath.modules.card.shared.dto.CardResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

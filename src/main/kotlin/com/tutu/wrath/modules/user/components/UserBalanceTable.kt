@@ -6,11 +6,11 @@ import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.table
 import com.tutu.wrath.modules.user.model.User
 import com.tutu.wrath.modules.user.model.UserBalance
+import com.tutu.wrath.modules.user.model.UserBeneficiaryExpense
 import com.tutu.wrath.util.Money
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container
 import io.kvision.core.CssSize
-import io.kvision.core.StringPair
 import io.kvision.core.UNIT
 import io.kvision.html.Div
 import io.kvision.snabbdom.VNode
@@ -21,13 +21,11 @@ import kotlinx.coroutines.launch
 
 typealias GetFriends = suspend () -> Result<List<User>>
 typealias GetBalance = suspend (userId: String) -> Result<UserBalance>
-typealias CreateRows = (balance: UserBalance) -> List<Row>
 
 
 class UserBalanceTable(
     private val getFriends: GetFriends,
     private val getBalance: GetBalance,
-    private val createRows: CreateRows,
 ) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val columns = listOf(
@@ -89,10 +87,26 @@ class UserBalanceTable(
            size = CssSize(1.3, UNIT.rem)
        )
     }
+
+    private fun createRows(balance: UserBalance): List<Row> {
+        val rows = mutableListOf<Row>()
+        for (index in 0..getMaxRows(balance)) {
+            val row = UserBeneficiaryExpense(balance.friendBeneficiaryExpenses.getOrNull(index), balance.userBeneficiaryExpenses.getOrNull(index))
+            rows.add(Row(row))
+        }
+
+        return rows
+    }
+
+    private fun getMaxRows(balance: UserBalance): Int {
+        val count = if (balance.friendBeneficiaryExpenses.size > balance.userBeneficiaryExpenses.size) balance.friendBeneficiaryExpenses.size
+        else balance.userBeneficiaryExpenses.size
+        return count - 1
+    }
 }
 
-fun Container.userBalanceTable(getFriends: GetFriends, getBalance: GetBalance, calculateBalance: CreateRows) : UserBalanceTable {
-    val component = UserBalanceTable(getFriends, getBalance, calculateBalance)
+fun Container.userBalanceTable(getFriends: GetFriends, getBalance: GetBalance) : UserBalanceTable {
+    val component = UserBalanceTable(getFriends, getBalance)
     this.add(component)
     return component
 }

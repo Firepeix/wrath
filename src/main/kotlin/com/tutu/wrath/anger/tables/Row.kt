@@ -15,12 +15,15 @@ interface RowValue {
     fun shouldHighlight(): Boolean {
         return false
     }
-
-    fun a() {
-        console.log("as")
-    }
 }
 
 class Row(value: RowValue) : RowValue by value
+
+class DisplayRow(vararg val displays: Display): RowValue {
+    override fun getRowValue(id: String, position: Int): Display {
+        return displays.getOrNull(position) ?: super.getRowValue(id, position)
+    }
+}
+
 
 
