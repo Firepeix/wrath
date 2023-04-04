@@ -33,7 +33,8 @@ fun Div.table(
 
     div(className = "flex flex-col overflow-x-auto dark:text-neutral-100") {
         div(className = "inline-block min-w-full") {
-            baseTable(className = "min-w-full text-center text-sm font-light dark:border-neutral-500 border-t dark:border-none") {
+            baseTable(className = "min-w-full text-center text-sm font-light dark:border-neutral-500 dark:border-none") {
+                if (header != null) addCssClass("border-t")
                 if (showColumns) {
                     thead(className = "font-medium dark:border-neutral-500") {
                         tr(className = "border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600") {

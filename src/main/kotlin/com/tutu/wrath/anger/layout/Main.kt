@@ -13,7 +13,7 @@ import io.kvision.html.div
 import io.kvision.html.main as baseMain
 
 fun Container.main(manager: Manager) {
-    val summaryModel = modal("summary-modal", "Sumario de Debito", noPadding = true) { modal ->
+    val summaryModal = modal("summary-modal", "Sumario de Debito", noPadding = true) { modal ->
         debitSummary(manager.cardManager.debitSummaryUseCase::getSummary).also {
             modal.onDisplay = it::initialize
         }
@@ -21,7 +21,7 @@ fun Container.main(manager: Manager) {
 
     baseMain(className = "p-8 px-4") {
         pageHeading("Despesas") {
-            primaryCTAButton("Ver Resumo") { summaryModel.toggle() }
+            primaryCTAButton("Ver Resumo") { summaryModal.toggle() }
         }
 
         div(className = "grid gap-4 grid-cols-3 py-4"){

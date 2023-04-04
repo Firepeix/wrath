@@ -29,23 +29,45 @@ table tr td:first-child {
   margin-top: 0.042rem;
 }
 
-/*.table :where(th, td) {*/
-/*  white-space: inherit;*/
-/*  padding: 1rem;*/
-/*  vertical-align: middle;*/
-/*}*/
-/**/
-
-.header-mode {
-  margin-bottom: 0;
+.header-mode .group div {
+    border-radius: 0;
+    --tw-shadow: 0 0 0 #3b71ca, 0 -1px 0 0 #3b71ca, 0 1px 0 0 #3b71ca !important;
+    border-color: #e5e7eb;
+    border-right: none;
 }
 
-.header-mode .ts-control {
-  border-radius: 0;
-  border-right: none;
-  border-left: none;
-  border-bottom: none;
-  border-top: 1px solid #e5e7eb !important;
+.header-mode .group div:nth-child(1) {
+  display: none;
+}
+
+.delay-init label {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  --tw-translate-y: -0.9rem;
+  --tw-scale-x: 0.8;
+  --tw-scale-y: 0.8;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity)) !important;
+}
+
+.delay-init input[data-te-input-focused] + label {
+   --tw-text-opacity: 1;
+   color: rgb(37 99 235 / var(--tw-text-opacity)) !important;
+}
+
+.delay-init .group div:nth-child(1) {
+  border-right-width: 0px;
+}
+
+.delay-init .group div:nth-child(2) {
+  border-top-color: transparent;
+  border-style: solid;
+  border-top-width: 1px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+}
+
+.delay-init .group div:nth-child(3) {
+  border-left-width: 0px;
 }
 
 .ts-control {

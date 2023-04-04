@@ -2112,10 +2112,6 @@ video {
   padding-right: 24px;
 }
 
-.pt-1 {
-  padding-top: 0.25rem;
-}
-
 .pt-2 {
   padding-top: 0.5rem;
 }
@@ -2126,10 +2122,6 @@ video {
 
 .pt-\[0\.37rem\] {
   padding-top: 0.37rem;
-}
-
-.pt-0 {
-  padding-top: 0px;
 }
 
 .text-left {
@@ -2250,6 +2242,11 @@ video {
 
 .not-italic {
   font-style: normal;
+}
+
+.ordinal {
+  --tw-ordinal: ordinal;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 
 .leading-10 {
