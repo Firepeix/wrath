@@ -2,7 +2,7 @@ package com.tutu.wrath.modules.income.components
 
 import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
-import com.tutu.wrath.anger.tables.table
+import com.tutu.wrath.anger.tables.tableDeprecated
 import com.tutu.wrath.modules.income.models.Income
 import com.tutu.wrath.modules.income.usecases.GetIncomeUseCase
 import com.tutu.wrath.util.unwrap
@@ -26,9 +26,7 @@ class IncomeTable(private val useCase: GetIncomeUseCase) : Div(), CoroutineScope
     private val rows = ObservableValue(emptyList<Row>())
 
     init {
-        table(header = "Entradas", columns = columns, rows = rows)
-        //overflow = Overflow.SCROLL
-        //display = Display.TABLE
+        tableDeprecated(header = "Entradas", columns = columns, rows = rows)
     }
 
     override fun afterInsert(node: VNode) {

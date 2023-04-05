@@ -12,8 +12,11 @@ object TailwindElementsModule : ModuleInitializer {
 
     }
 
-    fun createSelect(element: HTMLElement) {
-        elements.Select.getOrCreateInstance(element)
+    fun createSelect(initialValue: String?, element: HTMLElement) {
+        val select = elements.Select.getOrCreateInstance(element)
+        if (initialValue != null) {
+            select.setValue(initialValue)
+        }
     }
 
     fun getValue(element: HTMLElement): String? {

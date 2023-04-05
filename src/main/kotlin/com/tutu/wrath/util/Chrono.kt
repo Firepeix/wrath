@@ -23,6 +23,8 @@ data class Chrono(val date: LocalDateTime) {
         override fun toSelectItem(): StringPair {
             return ordinal.toString() to ptBr
         }
+
+        fun distance(to: Month): Int  = to.ordinal - ordinal
     }
 
     constructor(value: String) : this(parseToDate(value))

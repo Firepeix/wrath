@@ -1,9 +1,10 @@
 package com.tutu.wrath.modules.user.components
 
 import com.tutu.wrath.anger.display.Display
+import com.tutu.wrath.anger.form.select.Select
 import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
-import com.tutu.wrath.anger.tables.table
+import com.tutu.wrath.anger.tables.tableDeprecated
 import com.tutu.wrath.modules.user.model.User
 import com.tutu.wrath.modules.user.model.UserBalance
 import com.tutu.wrath.modules.user.model.UserBeneficiaryExpense
@@ -35,13 +36,20 @@ class UserBalanceTable(
 
     private val balance: ObservableValue<Pair<User?, UserBalance?>> = ObservableValue(Pair<User?, UserBalance?>(null, null))
     private val rows = ObservableValue(emptyList<Row>())
-    private val users = ObservableValue(emptyList<User>())
+
+    private var userSelect: Select<User>? = null
+    private var users = emptyList<User>()
+        set(value) { field = value
+            userSelect?.options = value
+            value.firstOrNull()?.let { setBalance(it) }
+        }
+
     private val chosenUser: ObservableValue<User?> = ObservableValue(null)
     private val summary: ObservableValue<Display?> = ObservableValue(null)
 
     init {
-        balanceTableHeader(chosenUser, users)
-        table(columns, rows, footer = summary)
+        userSelect = balanceTableHeader(chosenUser, users)
+        tableDeprecated(columns, rows, footer = summary)
     }
 
     override fun afterInsert(node: VNode) {
@@ -50,8 +58,6 @@ class UserBalanceTable(
     }
 
     private fun setHooks() {
-        users.subscribe { users ->  users.firstOrNull()?.let { setBalance(it) } }
-
         chosenUser.subscribe { if(it != null) setBalance(it)  }
 
         balance.subscribe { (user, balance) ->
@@ -64,7 +70,7 @@ class UserBalanceTable(
 
     private fun initialize() {
         launch {
-            users.setState(getFriends().unwrap(emptyList()))
+            users = getFriends().unwrap(emptyList())
         }
     }
 

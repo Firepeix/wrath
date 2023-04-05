@@ -2,100 +2,119 @@ package com.tutu.wrath.anger.form.select
 
 import com.tutu.wrath.anger.layout.attributes
 import com.tutu.wrath.anger.modules.TailwindElementsModule
+import com.tutu.wrath.anger.skeleton.input.SelectSkeleton
+import com.tutu.wrath.util.VModel
+import io.kvision.core.ClassSetBuilder
 import io.kvision.core.Container
 import io.kvision.core.StringPair
 import io.kvision.core.onEvent
 import io.kvision.form.select.SelectInput
-import io.kvision.form.select.selectInput
 import io.kvision.html.Div
-import io.kvision.html.div
 import io.kvision.html.label
 import io.kvision.snabbdom.VNode
-import io.kvision.state.ObservableValue
 import io.kvision.state.bind
 import io.kvision.utils.event
 
-class Select<T: SelectItem>(
-    private val value: ObservableValue<T?>,
-    private val options: ObservableValue<List<T>>,
-    private val asHeader: Boolean = false,
-    private val label: String? = null,
-    private val startInit: Boolean = true
-) : Div(className = "justify-center w-full") {
+private class InnerSelect(
+    input: SelectInput,
+    isLoading: Boolean,
+    label: String?,
+    private val header: Boolean,
+): Div(className = "xl:w-100") {
 
-    private val optionsMap: ObservableValue<List<StringPair>> = ObservableValue(createMap(options.value))
-    private var select: SelectInput? = null
-    private var isInitialized = false
-
+    var isLoading by refreshOnUpdate(isLoading)
     init {
-        if (!startInit) addCssClass("delay-init")
-        val self = this
-        div(className = "xl:w-100") {
-            if (self.asHeader) addCssClass("header-mode")
-            self.select = selectInput(options = self.optionsMap.value, className = "w-full") {
-                onEvent {
-                    event("optionSelect.te.select") { self.onChange() }
-                }
-            }.bind(self.optionsMap) { options = it }
+        add(input)
 
-            if (self.label != null) {
-                label(self.label) { attributes("data-te-select-label-ref" to "") }
-            }
+        if (label != null) {
+            label(label) { attributes("data-te-select-label-ref" to "") }
         }
     }
 
+    override fun buildClassSet(classSetBuilder: ClassSetBuilder) {
+        super.buildClassSet(classSetBuilder)
+        if (header) classSetBuilder.add("header-mode")
+        if (isLoading) classSetBuilder.add("hidden")
+    }
+}
+
+class Select<T: SelectItem>(
+    private val value: VModel<T?>,
+    options: List<T>,
+    header: Boolean = false,
+    label: String? = null,
+    private val lateInit: Boolean = false,
+    isLoading: Boolean = false
+) : Div(className = "justify-center w-full") {
+
+    var isLoading by refreshOnUpdate(isLoading) {
+        super.refresh()
+        skeleton.isLoading = it
+        innerSelect.isLoading = it
+    }
+
+    private val optionMap = VModel(createMap(options))
+
+    var options by refreshOnUpdate(options) {
+        super.refresh()
+        optionMap.setState(createMap(it))
+    }
+
+
+    private var isInitialized = false
+
+    private val skeleton = SelectSkeleton(isLoading)
+
+    private val input = SelectInput(options = optionMap.value, className = "w-full") {
+        onEvent {
+            event("optionSelect.te.select") { onChange() }
+        }
+    }.bind(optionMap) { this.options = it }
+
+    private val innerSelect = InnerSelect(input, isLoading, label, header)
+
+    init {
+        add(skeleton)
+        add(innerSelect)
+    }
+
+    override fun buildClassSet(classSetBuilder: ClassSetBuilder) {
+        super.buildClassSet(classSetBuilder)
+        if (lateInit) classSetBuilder.add("delay-init")
+    }
+
     override fun afterInsert(node: VNode) {
-        if (startInit) initialize()
-        setHooks()
+        if (!lateInit) initialize()
     }
 
     fun initialize() {
         if (!isInitialized) {
-            select?.getElement()?.let { element ->
-                TailwindElementsModule.createSelect(element)
-                value.value?.let { setValue(it.toSelectItem().first) }
-            }
+            input.getElement()?.let { TailwindElementsModule.createSelect(value.value?.toSelectItem()?.first, it) }
+            value.subscribe {  it?.let { setValue(it.toSelectItem().first) } }
             isInitialized = true
         }
     }
 
-    private fun setHooks() {
-        options.subscribe { options -> optionsMap.setState(createMap(options))}
-    }
-
-    private fun createMap(options: List<SelectItem>): List<StringPair> {
-        return options.map { it.toSelectItem() }
-    }
-
     private fun onChange() {
         val value = getValue()
-        this.value.setState(options.value.firstOrNull { it.toSelectItem().first == value })
+        this.value.setState(options.firstOrNull { it.toSelectItem().first == value })
     }
 
-    private fun getValue() =  select?.getElement()?.run { TailwindElementsModule.getValue(this) }
+    private fun getValue() =  input.getElement()?.run { TailwindElementsModule.getValue(this) }
 
-    private fun setValue(value: String) = select?.getElement()?.run { TailwindElementsModule.setValue(value, this) }
+    private fun setValue(value: String) = input.getElement()?.run { TailwindElementsModule.setValue(value, this) }
 }
 
 fun <T: SelectItem> Container.select(
-    value: ObservableValue<T?>,
-    options: ObservableValue<List<T>>,
-    label: String? = null,
-    asHeader: Boolean = false,
-    startInit: Boolean = true
-)
-: Select<T> {
-    val component = Select(value, options, asHeader, label, startInit)
-    add(component)
-    return component
-}
-
-fun <T: SelectItem> Container.select(
-    value: ObservableValue<T?>,
+    value: VModel<T?>,
     options: List<T>,
     label: String? = null,
-    asHeader: Boolean = false,
-    startInit: Boolean = true
+    header: Boolean = false,
+    lateInit: Boolean = false
 ): Select<T> {
-    return select(value, ObservableValue(options), label, asHeader, startInit)
+    return Select(value, options, header, label, lateInit).also { add(it) }
+}
+
+internal fun createMap(options: List<SelectItem>): List<StringPair> {
+    return options.map { it.toSelectItem() }
 }

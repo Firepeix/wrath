@@ -2,7 +2,7 @@ package com.tutu.wrath.modules.card.credit.components
 
 import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.Row
-import com.tutu.wrath.anger.tables.table
+import com.tutu.wrath.anger.tables.tableDeprecated
 import com.tutu.wrath.modules.card.credit.model.CreditSummary
 import com.tutu.wrath.modules.card.credit.usecases.GetCreditSummaryUseCase
 import com.tutu.wrath.util.unwrap
@@ -27,7 +27,7 @@ class CreditSummaryTable(private val useCase: GetCreditSummaryUseCase) : Div(), 
     private val rows = ObservableValue(emptyList<Row>())
 
     init {
-        table(header = "Resumo Compras", columns = columns, rows = rows)
+        tableDeprecated(header = "Resumo Compras", columns = columns, rows = rows)
     }
 
     override fun afterInsert(node: VNode) {
