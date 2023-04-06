@@ -1,11 +1,14 @@
 package com.tutu.wrath.anger.form.select
 
+import com.tutu.wrath.anger.form.select.Select.Attributes
+import com.tutu.wrath.anger.form.select.Select.Properties
 import com.tutu.wrath.anger.modules.TailwindElementsModule
 import com.tutu.wrath.anger.modules.TailwindElementsModule.getValue
 import com.tutu.wrath.anger.skeleton.input.SelectSkeleton
 import com.tutu.wrath.anger.skeleton.input.selectSkeleton
 import com.tutu.wrath.util.Statefull
 import com.tutu.wrath.util.VModel
+import com.tutu.wrath.util.observable
 import com.tutu.wrath.util.selectInput
 import io.kvision.core.ClassSetBuilder
 import io.kvision.core.Container
@@ -17,12 +20,16 @@ import io.kvision.snabbdom.VNode
 import io.kvision.state.bind
 import io.kvision.utils.event
 
-data class Select<T: SelectItem>(val component: SelectComponent<T>, val properties: SelectProperties<T>)
-data class SelectAttributes(val header: Boolean = false, val label: String? = null, val lateInit: Boolean = false)
+data class Select<T: SelectItem>(val component: SelectComponent<T>, val properties: Properties<T>) {
+    data class Attributes(val header: Boolean = false, val label: String? = null, val lateInit: Boolean = false)
+    class Properties<T: SelectItem>(options: List<T>, isLoading: Boolean = false) {
+        val listeners = SelectState.Listeners<T>()
+        var isLoading by observable(isLoading) { listeners.onLoadingChanged?.invoke(it) }
+        var options by observable(options) { listeners.onOptionsChanged?.invoke(it) }
+    }
+}
 
-class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: SelectProperties<T>, private val attributes: SelectAttributes = SelectAttributes()
-) : Div(className = "justify-center w-full"), Statefull<SelectState<T>> {
-
+class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: Properties<T>, private val attributes: Attributes) : Div(className = "justify-center w-full"), Statefull<SelectState<T>> {
     private val state = SelectState(value, properties) {
         onValueChanged = ::onValueChanged
         onOptionsChanged = ::onOptionsChanged
@@ -98,8 +105,8 @@ class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: SelectProper
 
 fun <T: SelectItem> Container.select(
     value: VModel<T?>,
-    properties: SelectProperties<T>,
-    attributes: SelectAttributes = SelectAttributes(),
+    properties: Properties<T>,
+    attributes: Attributes = Attributes(),
     parent: Container? = null
 ): Select<T> {
     val component = SelectComponent(value, properties, attributes).also {

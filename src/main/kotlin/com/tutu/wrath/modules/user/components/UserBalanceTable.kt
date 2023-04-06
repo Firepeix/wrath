@@ -24,10 +24,7 @@ typealias GetFriends = suspend () -> Result<List<User>>
 typealias GetBalance = suspend (userId: String) -> Result<UserBalance>
 
 
-class UserBalanceTable(
-    private val getFriends: GetFriends,
-    private val getBalance: GetBalance,
-) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class UserBalanceTable(private val getFriends: GetFriends, private val getBalance: GetBalance,) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val columns = listOf(
         Column("payExpense", "A Pagar", colspan = 2),
@@ -37,18 +34,12 @@ class UserBalanceTable(
     private val balance: ObservableValue<Pair<User?, UserBalance?>> = ObservableValue(Pair<User?, UserBalance?>(null, null))
     private val rows = ObservableValue(emptyList<Row>())
 
-    private var userSelect: Select<User>? = null
-    private var users = emptyList<User>()
-        set(value) { field = value
-            userSelect?.properties?.options = value
-            value.firstOrNull()?.let { setBalance(it) }
-        }
-
+    private var select: Select<User>? = null
     private val chosenUser: ObservableValue<User?> = ObservableValue(null)
     private val summary: ObservableValue<Display?> = ObservableValue(null)
 
     init {
-        userSelect = balanceTableHeader(chosenUser, users)
+        select = balanceTableHeader(chosenUser, emptyList())
         tableDeprecated(columns, rows, footer = summary)
     }
 
@@ -70,7 +61,9 @@ class UserBalanceTable(
 
     private fun initialize() {
         launch {
-            users = getFriends().unwrap(emptyList())
+            val users = getFriends().unwrap(emptyList())
+            select?.properties?.options = users
+            users.firstOrNull()?.let { setBalance(it) }
         }
     }
 

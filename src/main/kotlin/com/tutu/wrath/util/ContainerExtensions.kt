@@ -4,6 +4,8 @@ import io.kvision.core.Container
 import io.kvision.core.StringPair
 import io.kvision.form.select.SelectInput
 import io.kvision.html.Div
+import io.kvision.html.Table
+import io.kvision.html.Tbody
 import io.kvision.state.ObservableValue
 import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
@@ -39,6 +41,18 @@ fun Container.selectInput(options: List<StringPair>? = null, className: String? 
     return SelectInput(options, className = className, init = init).also {
         if (parent == null) add(it)
         else parent.add(it)
+    }
+}
+
+fun Container.baseTable(className: String? = null,init: (Table) -> Unit): Table {
+    return Table(className = className, init = init).also {
+        add(it)
+    }
+}
+
+fun Container.tBody(className: String? = null, init: (Tbody) -> Unit): Tbody {
+    return Tbody(className, init).also {
+        add(it)
     }
 }
 

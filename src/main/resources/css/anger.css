@@ -2,6 +2,14 @@ table {
   font-size: 14px;
 }
 
+.loaded tr.loading {
+    display: none;
+}
+
+.loading tr.content {
+    display: none;
+}
+
 table tr th {
   text-align: right;
   border-radius: 0 !important;

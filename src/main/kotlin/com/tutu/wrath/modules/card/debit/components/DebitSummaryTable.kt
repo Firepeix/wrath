@@ -2,8 +2,6 @@ package com.tutu.wrath.modules.card.debit.components
 
 import com.tutu.wrath.anger.display.Display
 import com.tutu.wrath.anger.form.select.Select
-import com.tutu.wrath.anger.form.select.SelectAttributes
-import com.tutu.wrath.anger.form.select.SelectProperties
 import com.tutu.wrath.anger.form.select.select
 import com.tutu.wrath.anger.tables.*
 import com.tutu.wrath.modules.card.debit.model.DebitSummary
@@ -50,12 +48,15 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
             select = select(
                 value = state.month,
                 parent = it,
-                properties = SelectProperties(options = Month.values().asList(), isLoading = true),
-                attributes = SelectAttributes(label = "Mes Vigente", lateInit = true),
+                properties = Select.Properties(options = Month.values().asList(), isLoading = true),
+                attributes = Select.Attributes(label = "Mes Vigente", lateInit = true),
             )
         }
 
-        table = table(listOf(Column("debits", "Debitos", colspan = 2)), emptyList(), flat = true, showColumns = false)
+        table = table(
+            properties = Table.Properties(Column("debits", "Debitos", colspan = 2), rows = emptyList(), isLoading = true),
+            attributes = Table.Attributes(flat = true, showColumns = false, estimatedRows = 6)
+        )
     }
 
     fun initialize() {
@@ -90,11 +91,12 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
 
     private fun onLoadedChanged(loaded: Boolean) {
         select?.properties?.isLoading = !loaded && !state.isMounted
+        table?.properties?.isLoading = !loaded
     }
 
     private fun onSummaryChanged(summary: DebitSummary?) {
         if (summary != null) {
-            table?.rows = createRows(summary)
+            table?.properties?.rows = createRows(summary)
         }
     }
 
