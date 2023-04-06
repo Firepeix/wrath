@@ -40,7 +40,7 @@ class UserBalanceTable(
     private var userSelect: Select<User>? = null
     private var users = emptyList<User>()
         set(value) { field = value
-            userSelect?.options = value
+            userSelect?.properties?.options = value
             value.firstOrNull()?.let { setBalance(it) }
         }
 

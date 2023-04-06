@@ -2,29 +2,29 @@ package com.tutu.wrath.modules.card.debit.components
 
 import com.tutu.wrath.anger.display.Display
 import com.tutu.wrath.anger.form.select.Select
-import com.tutu.wrath.anger.tables.Column
-import com.tutu.wrath.anger.tables.DisplayRow
-import com.tutu.wrath.anger.tables.Row
-import com.tutu.wrath.anger.tables.Table
+import com.tutu.wrath.anger.form.select.SelectAttributes
+import com.tutu.wrath.anger.form.select.SelectProperties
+import com.tutu.wrath.anger.form.select.select
+import com.tutu.wrath.anger.tables.*
 import com.tutu.wrath.modules.card.debit.model.DebitSummary
 import com.tutu.wrath.util.*
+import com.tutu.wrath.util.Chrono.Month
 import io.kvision.core.Container
 import io.kvision.html.Div
-import io.kvision.html.div
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-typealias GetDebitSummary = suspend (month: Chrono.Month?) -> Result<DebitSummary>
+typealias GetDebitSummary = suspend (month: Month?) -> Result<DebitSummary>
 
 private object Listeners {
     var onSummaryChange: ((DebitSummary?) -> Unit)? = null
-    var onMonthChange: ((Chrono.Month?) -> Unit)? = null
+    var onMonthChange: ((Month?) -> Unit)? = null
     var onLoadedChange: ((Boolean) -> Unit)? = null
 }
 
 private class State(init: Listeners.(State) -> Unit) {
-    val month: VModel<Chrono.Month?> = model(Chrono.now().month) { Listeners.onMonthChange?.invoke(it) }
+    val month: VModel<Month?> = model(Chrono.now().month) { Listeners.onMonthChange?.invoke(it) }
 
     var isLoaded by observable(false) { Listeners.onLoadedChange?.invoke(it) }
     var isMounted = false
@@ -36,23 +36,26 @@ private class State(init: Listeners.(State) -> Unit) {
 }
 
 class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    private val state: State = State { state ->
-        onLoadedChange = { select.isLoading = !it && !state.isMounted }
-        onSummaryChange = { it?.let { table.rows = createRows(it) } }
-        onMonthChange = { launch { if(state.isLoaded) load(it) } }
+    private val state = State {
+        onLoadedChange = ::onLoadedChanged
+        onSummaryChange = ::onSummaryChanged
+        onMonthChange = ::onMonthChanged
     }
 
-    private val table = Table(listOf(Column("debits", "Debitos", colspan = 2)), emptyList(), flat = true, showColumns = false)
-    private val select = Select(state.month, Chrono.Month.values().asList(), label = "Mes Vigente", lateInit = true, isLoading = true)
+    private var table: Table? = null
+    private var select: Select<Month>? = null
 
     init {
-        val self = this
-
-        div(className = "shadow-none flex flex-shrink-0 items-center justify-between border-neutral-100 border-b border-opacity-100 p-3 dark:border-opacity-50") {
-            add(self.select)
+        div("shadow-none flex flex-shrink-0 items-center justify-between border-neutral-100 border-b border-opacity-100 p-3 dark:border-opacity-50") {
+            select = select(
+                value = state.month,
+                parent = it,
+                properties = SelectProperties(options = Month.values().asList(), isLoading = true),
+                attributes = SelectAttributes(label = "Mes Vigente", lateInit = true),
+            )
         }
 
-        add(table)
+        table = table(listOf(Column("debits", "Debitos", colspan = 2)), emptyList(), flat = true, showColumns = false)
     }
 
     fun initialize() {
@@ -63,12 +66,12 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
         launch {
             state.month.setState(Chrono.now().month)
             load(Chrono.now().month)
-            select.initialize()
+            select?.component?.initialize()
             state.isMounted = true
         }
     }
 
-    private suspend fun load(month: Chrono.Month?) {
+    private suspend fun load(month: Month?) {
         state.isLoaded = false
         state.summary = getSummary(month).unwrap(null)
         state.isLoaded = true
@@ -84,6 +87,26 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
             DisplayRow(Display("Valor Previsto"), summary.forecastAmount.display()),
         ).map { Row(it) }
     }
+
+    private fun onLoadedChanged(loaded: Boolean) {
+        select?.properties?.isLoading = !loaded && !state.isMounted
+    }
+
+    private fun onSummaryChanged(summary: DebitSummary?) {
+        if (summary != null) {
+            table?.rows = createRows(summary)
+        }
+    }
+
+    private fun onMonthChanged(month: Month?) {
+        launch {
+            if(state.isLoaded) {
+                load(month)
+            }
+        }
+    }
+
+
 }
 
 fun Container.debitSummary(getSummary: GetDebitSummary) : DebitSummaryTable {

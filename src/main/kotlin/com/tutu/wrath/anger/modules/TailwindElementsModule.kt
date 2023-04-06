@@ -24,6 +24,6 @@ object TailwindElementsModule : ModuleInitializer {
     }
 
     fun setValue(value: String, element: HTMLElement) {
-        elements.Select.getInstance(element).setValue(value)
+        elements.Select.getInstance(element)?.setValue(value)
     }
 }

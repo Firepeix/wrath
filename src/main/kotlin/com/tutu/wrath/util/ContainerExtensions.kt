@@ -1,6 +1,9 @@
 package com.tutu.wrath.util
 
 import io.kvision.core.Container
+import io.kvision.core.StringPair
+import io.kvision.form.select.SelectInput
+import io.kvision.html.Div
 import io.kvision.state.ObservableValue
 import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
@@ -25,3 +28,19 @@ fun Container.toggleClass(css: String) {
     }
 }
 
+
+fun Container.div(className: String? = null, init: (Div) -> Unit): Div {
+    return Div(className = className, init = init).also {
+        add(it)
+    }
+}
+
+fun Container.selectInput(options: List<StringPair>? = null, className: String? = null, parent: Container? = null, init: (SelectInput) -> Unit): SelectInput {
+    return SelectInput(options, className = className, init = init).also {
+        if (parent == null) add(it)
+        else parent.add(it)
+    }
+}
+
+interface Statefull<S> {
+}
