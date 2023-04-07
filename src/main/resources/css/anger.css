@@ -10,21 +10,33 @@ table {
     display: none;
 }
 
-table tr th {
+table tr th:last-child {
   text-align: right;
   border-radius: 0 !important;
+}
+
+table tr th {
+  border-radius: 0 !important;
+}
+
+.small-table table tr th {
+  text-align: right;
 }
 
 table tr th:first-child {
   text-align: left;
 }
 
-table tr td {
+table tr td:first-child {
+  text-align: left !important;
+}
+
+table tr td:last-child {
   text-align: right;
 }
 
-table tr td:first-child {
-  text-align: left !important;
+.small-table table tr td {
+  text-align: right;
 }
 
 .kv-toastify-danger {

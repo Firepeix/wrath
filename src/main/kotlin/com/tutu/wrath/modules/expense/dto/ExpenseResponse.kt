@@ -6,6 +6,9 @@ import com.tutu.wrath.modules.expense.model.Expense
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class ExpenseListResponse(val data: List<ExpenseResponse>)
+
+@Serializable
 data class ExpenseResponse(
     val id: String,
     val payed: Boolean,

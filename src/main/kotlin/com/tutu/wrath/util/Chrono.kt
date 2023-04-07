@@ -1,5 +1,6 @@
 package com.tutu.wrath.util
 
+import com.tutu.wrath.anger.display.Display
 import com.tutu.wrath.anger.form.select.SelectItem
 import io.kvision.core.StringPair
 import io.kvision.types.LocalDateTime
@@ -58,6 +59,10 @@ data class Chrono(val date: LocalDateTime) {
     }
 
     val month = Month.values()[date.getMonth()]
+
+    fun displayDate(): Display {
+        return Display("${date.getDay().leadingZero()}/${date.getUTCMonth().leadingZero()}/${date.getUTCFullYear()}")
+    }
 }
 
 fun String.generalizeDate(): String {
@@ -67,3 +72,5 @@ fun String.generalizeDate(): String {
 
     return this
 }
+
+fun Int.leadingZero() = if (this < 10) "0$this" else "$this"

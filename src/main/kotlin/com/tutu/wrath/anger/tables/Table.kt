@@ -9,9 +9,19 @@ import io.kvision.html.div
 import io.kvision.state.ObservableValue
 import io.kvision.state.bind
 
+
 data class Table(val component: TableComponent, val properties: Properties) {
+
+    class Listeners {
+        var onColumnsChanged: ((List<Column>) -> Unit)? = null
+        var onRowsChanged: ((List<Row>) -> Unit)? = null
+        var onFooterChanged: ((Display?) -> Unit)? = null
+        var onLoadingChanged: ((Boolean) -> Unit)? = null
+    }
+
     data class Attributes(val header: String? = null, val showColumns: Boolean = true, val flat: Boolean = false, val estimatedRows: Int = 5)
-    class Properties(vararg columns: Column, rows: List<Row>, footer: Display? = null, isLoading: Boolean = false): StateProperties<Listeners> {
+
+    class Properties(vararg columns: Column, rows: List<Row> = emptyList(), footer: Display? = null, isLoading: Boolean = false): StateProperties<Listeners> {
         override val listeners = Listeners()
 
         var columns by observable(columns) { listeners.onColumnsChanged?.invoke(it.toList()) }
@@ -20,12 +30,7 @@ data class Table(val component: TableComponent, val properties: Properties) {
         var isLoading by observable(isLoading) { listeners.onLoadingChanged?.invoke(it) }
     }
 
-    class Listeners {
-        var onColumnsChanged: ((List<Column>) -> Unit)? = null
-        var onRowsChanged: ((List<Row>) -> Unit)? = null
-        var onFooterChanged: ((Display?) -> Unit)? = null
-        var onLoadingChanged: ((Boolean) -> Unit)? = null
-    }
+
 }
 
 
@@ -42,6 +47,7 @@ class TableComponent(properties: Table.Properties, private val attributes: Table
     private var isLoading: Boolean = properties.isLoading
 
     init {
+        if (properties.columns.size < 5) addCssClass("small-table")
         attributes.header?.let { tableHeader(it) }
         div(className = "flex flex-col overflow-x-auto dark:text-neutral-100") { container ->
             container.div(className = "inline-block min-w-full")  { div ->
@@ -108,10 +114,7 @@ class TableComponent(properties: Table.Properties, private val attributes: Table
 
     override fun buildClassSet(classSetBuilder: ClassSetBuilder) {
         super.buildClassSet(classSetBuilder)
-        if (!attributes.flat) {
-            classSetBuilder.add("shadow-md-strong")
-        }
-
+        if (!attributes.flat) classSetBuilder.add("shadow-md-strong")
         if (!isLoading) classSetBuilder.add("loaded") else classSetBuilder.add("loading")
     }
 
@@ -154,6 +157,8 @@ fun Div.tableDeprecated(
     flat: Boolean = false,
     showColumns: Boolean = true
 ) {
+
+    if (columns.size < 5) addCssClass("small-table")
     if (!flat) addCssClass("shadow-md-strong")
     header?.let { tableHeader(it) }
 

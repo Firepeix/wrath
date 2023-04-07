@@ -5,6 +5,7 @@ import com.tutu.wrath.anger.card.pageHeading
 import com.tutu.wrath.anger.modal.modal
 import com.tutu.wrath.modules.card.credit.components.creditSummaryTable
 import com.tutu.wrath.modules.card.debit.components.debitSummary
+import com.tutu.wrath.modules.expense.components.expenseTable
 import com.tutu.wrath.modules.income.components.incomeTable
 import com.tutu.wrath.modules.user.components.userBalanceTable
 import com.tutu.wrath.util.Manager
@@ -28,6 +29,10 @@ fun Container.main(manager: Manager) {
             incomeTable(manager.incomeManager.getIncomeUseCase)
             creditSummaryTable(manager.cardManager.getCreditSummaryUseCase)
             userBalanceTable(manager.userManager.useCase::getFriends, manager.userManager.balanceUseCase::getBalance)
+        }
+
+        div {
+            expenseTable(manager.expenseManager.expenseUseCase::getExpenses)
         }
 
     }

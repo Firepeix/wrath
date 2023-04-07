@@ -2,12 +2,17 @@ package com.tutu.wrath.modules.expense.provider
 
 import com.tutu.wrath.modules.accounting.provider.AccountMapper
 import com.tutu.wrath.modules.card.shared.provider.CardMapper
+import com.tutu.wrath.modules.expense.dto.ExpenseListResponse
 import com.tutu.wrath.modules.expense.dto.ExpenseResponse
 import com.tutu.wrath.modules.expense.model.Expense
 import com.tutu.wrath.util.Chrono
 import com.tutu.wrath.util.Money
 
 class ExpenseMapper(private val cardMapper: CardMapper, private val accountMapper: AccountMapper) {
+
+    fun toExpenseList(source: ExpenseListResponse): List<Expense> {
+        return source.data.map(::toExpense)
+    }
 
     fun toExpense(source: ExpenseResponse): Expense {
         return Expense(
