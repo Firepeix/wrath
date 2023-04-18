@@ -56,5 +56,8 @@ fun Container.tBody(className: String? = null, init: (Tbody) -> Unit): Tbody {
     }
 }
 
-interface Statefull<S> {
+abstract class Statefull<A, S>(protected val component: A, protected val properties: S) {
+    fun change(scope: S.(A) -> Unit) {
+        scope.invoke(properties, component)
+    }
 }

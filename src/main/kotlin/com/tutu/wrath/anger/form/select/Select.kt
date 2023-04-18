@@ -2,11 +2,10 @@ package com.tutu.wrath.anger.form.select
 
 import com.tutu.wrath.anger.form.select.Select.Attributes
 import com.tutu.wrath.anger.form.select.Select.Properties
-import com.tutu.wrath.anger.modules.TailwindElementsModule
-import com.tutu.wrath.anger.modules.TailwindElementsModule.getValue
+import com.tutu.wrath.anger.modules.tailwind.TailwindElementsModule
+import com.tutu.wrath.anger.modules.tailwind.TailwindElementsModule.getValue
 import com.tutu.wrath.anger.skeleton.input.SelectSkeleton
 import com.tutu.wrath.anger.skeleton.input.selectSkeleton
-import com.tutu.wrath.util.Statefull
 import com.tutu.wrath.util.VModel
 import com.tutu.wrath.util.observable
 import com.tutu.wrath.util.selectInput
@@ -42,7 +41,7 @@ data class Select<T: SelectItem>(private val component: SelectComponent<T>, priv
     }
 }
 
-class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: Properties<T>, private val attributes: Attributes) : Div(className = "justify-center w-full"), Statefull<SelectState<T>>, SelectActions<T> {
+class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: Properties<T>, private val attributes: Attributes) : Div(className = "justify-center w-full"), SelectActions<T> {
     private val state = SelectState(value, properties) {
         onValueChanged = ::onValueChanged
         onOptionsChanged = ::onOptionsChanged

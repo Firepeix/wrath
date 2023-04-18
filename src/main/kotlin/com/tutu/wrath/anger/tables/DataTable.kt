@@ -1,10 +1,16 @@
 package com.tutu.wrath.anger.tables
 
+import com.tutu.wrath.anger.pop.DropdownScope
+import com.tutu.wrath.anger.pop.dropdown
+import com.tutu.wrath.anger.tables.Table.Companion.table
 import com.tutu.wrath.util.State
 import com.tutu.wrath.util.StateProperties
 import com.tutu.wrath.util.observable
 import io.kvision.core.Container
+import io.kvision.core.onClick
 import io.kvision.html.Div
+import io.kvision.html.div
+import io.kvision.html.th
 
 typealias OnRowChanged = (List<Row>) -> Unit
 
@@ -26,17 +32,40 @@ class DataTableComponent(properties: DataTable.Properties, private val attribute
         onRowChanged = ::onRowChanged
     }
 
-    private var table: Table? = null
+    private var table: TableScope? = null
 
     init {
         table = table(
             properties = Table.Properties(*properties.columns, rows = properties.rows),
-            attributes = Table.Attributes(header = attributes.header)
+            attributes = Table.Attributes(header = attributes.header, makeHeader = makeDataHeader())
         )
     }
 
     private fun onRowChanged(value: List<Row>) {
-        table?.properties?.rows = value
+        table?.change {
+            rows = value
+        }
+    }
+
+    private fun makeDataHeader(): HeaderMaker {
+        return {index: Int, column: Column ->
+            var dropdown: DropdownScope? = null
+            th(className = "px-3 py-4 dark:border-neutral-500") {
+                onClick {
+                    dropdown?.toggle()
+                }
+
+                setAttribute("colspan", column.colspan.toString())
+                if (column.isSubdivided) {
+                    addCssClass("text-center")
+                    if (column.isNextSection(index)) addCssClass("border-l")
+                }
+
+                div(column.label)
+
+                dropdown = dropdown()
+            }
+        }
     }
 }
 

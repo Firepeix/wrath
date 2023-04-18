@@ -1961,6 +1961,10 @@ video {
   padding: 0.75rem;
 }
 
+.p-3\.5 {
+  padding: 0.875rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -2108,6 +2112,10 @@ video {
 
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem;
 }
 
 .pb-\[6px\] {
@@ -2305,6 +2313,10 @@ video {
 
 .leading-loose {
   line-height: 2;
+}
+
+.leading-none {
+  line-height: 1;
 }
 
 .leading-normal {

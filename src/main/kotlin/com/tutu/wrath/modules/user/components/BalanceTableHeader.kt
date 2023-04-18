@@ -9,6 +9,6 @@ import io.kvision.state.ObservableValue
 
 
 fun Container.balanceTableHeader(userId: ObservableValue<User?>, users: List<User>): Select<User> {
-    div("Divisão", className = "w-full bg-neutral p-3 text-center font-bold rounded-t")
+    div("Divisão", className = "w-full bg-neutral p-3.5 pb-3 leading-none text-center font-bold rounded-t")
     return select(userId, Select.Properties(users), Select.Attributes(header = true))
 }

@@ -4,6 +4,7 @@ import com.tutu.wrath.anger.display.Display
 import com.tutu.wrath.anger.form.select.Select
 import com.tutu.wrath.anger.form.select.select
 import com.tutu.wrath.anger.tables.*
+import com.tutu.wrath.anger.tables.Table.Companion.table
 import com.tutu.wrath.modules.card.debit.model.DebitSummary
 import com.tutu.wrath.util.*
 import com.tutu.wrath.util.Chrono.Month
@@ -40,7 +41,7 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
         onMonthChange = ::onMonthChanged
     }
 
-    private var table: Table? = null
+    private var table: TableScope? = null
     private var select: Select<Month>? = null
 
     init {
@@ -91,12 +92,14 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
 
     private fun onLoadedChanged(loaded: Boolean) {
         select?.change { isLoading = !loaded && !state.isMounted }
-        table?.properties?.isLoading = !loaded
+        table?.change { isLoading = !loaded }
     }
 
     private fun onSummaryChanged(summary: DebitSummary?) {
         if (summary != null) {
-            table?.properties?.rows = createRows(summary)
+            table?.change {
+                rows = createRows(summary)
+            }
         }
     }
 
