@@ -20,16 +20,29 @@ import io.kvision.snabbdom.VNode
 import io.kvision.state.bind
 import io.kvision.utils.event
 
-data class Select<T: SelectItem>(val component: SelectComponent<T>, val properties: Properties<T>) {
+interface SelectScope<T: SelectItem> {
+    var isLoading: Boolean
+    var options: List<T>
+}
+
+interface SelectActions<T: SelectItem> {
+    fun initialize()
+}
+
+data class Select<T: SelectItem>(private val component: SelectComponent<T>, private val properties: Properties<T>) {
     data class Attributes(val header: Boolean = false, val label: String? = null, val lateInit: Boolean = false)
-    class Properties<T: SelectItem>(options: List<T>, isLoading: Boolean = false) {
+    class Properties<T: SelectItem>(options: List<T>, isLoading: Boolean = false) : SelectScope<T> {
         val listeners = SelectState.Listeners<T>()
-        var isLoading by observable(isLoading) { listeners.onLoadingChanged?.invoke(it) }
-        var options by observable(options) { listeners.onOptionsChanged?.invoke(it) }
+        override var isLoading by observable(isLoading) { listeners.onLoadingChanged?.invoke(it) }
+        override var options by observable(options) { listeners.onOptionsChanged?.invoke(it) }
+    }
+
+    fun change(scope: SelectScope<T>.(actions: SelectActions<T>) -> Unit) {
+        scope.invoke(properties, component)
     }
 }
 
-class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: Properties<T>, private val attributes: Attributes) : Div(className = "justify-center w-full"), Statefull<SelectState<T>> {
+class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: Properties<T>, private val attributes: Attributes) : Div(className = "justify-center w-full"), Statefull<SelectState<T>>, SelectActions<T> {
     private val state = SelectState(value, properties) {
         onValueChanged = ::onValueChanged
         onOptionsChanged = ::onOptionsChanged
@@ -66,7 +79,7 @@ class SelectComponent<T: SelectItem>(value: VModel<T?>, properties: Properties<T
         if (!attributes.lateInit) initialize()
     }
 
-    fun initialize() {
+    override fun initialize() {
         if (!isInitialized) {
             input?.getElement()?.let { TailwindElementsModule.createSelect(initialValue?.toSelectItem()?.first, it) }
             isInitialized = true

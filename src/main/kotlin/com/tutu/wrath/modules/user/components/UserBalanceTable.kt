@@ -62,7 +62,9 @@ class UserBalanceTable(private val getFriends: GetFriends, private val getBalanc
     private fun initialize() {
         launch {
             val users = getFriends().unwrap(emptyList())
-            select?.properties?.options = users
+            select?.change {
+                options = users
+            }
             users.firstOrNull()?.let { setBalance(it) }
         }
     }

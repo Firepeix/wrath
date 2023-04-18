@@ -67,7 +67,7 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
         launch {
             state.month.setState(Chrono.now().month)
             load(Chrono.now().month)
-            select?.component?.initialize()
+            select?.change { it.initialize() }
             state.isMounted = true
         }
     }
@@ -90,7 +90,7 @@ class DebitSummaryTable(private val getSummary: GetDebitSummary,) : Div(), Corou
     }
 
     private fun onLoadedChanged(loaded: Boolean) {
-        select?.properties?.isLoading = !loaded && !state.isMounted
+        select?.change { isLoading = !loaded && !state.isMounted }
         table?.properties?.isLoading = !loaded
     }
 
