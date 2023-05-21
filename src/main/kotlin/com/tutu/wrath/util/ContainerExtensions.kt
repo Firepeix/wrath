@@ -63,12 +63,22 @@ abstract class Statefull<A, S>(protected val component: A, protected val propert
 }
 
 
-interface ContainerStyle
+class ContainerMetadata {
+    private val classNames: MutableList<String> = mutableListOf()
 
-fun <T: ContainerStyle> T.className(): String {
-    return toString().replace(".*\\(".toRegex(), "").replace("\\).*".toRegex(), "")
+    infix fun String.where(shouldExist: Boolean) {
+        if (shouldExist) classNames.add(this)
+    }
+
+    fun default(className: String) {
+        classNames.addAll(className.split(" "))
+    }
+
+    fun className() = classNames.joinToString(" ")
 }
 
-interface ContainerAttributes {
-    fun all(): Array<StringPair>
+fun style(block: ContainerMetadata.() -> Unit): ContainerMetadata {
+    val style = ContainerMetadata()
+    block(style)
+    return style
 }
