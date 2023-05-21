@@ -61,3 +61,14 @@ abstract class Statefull<A, S>(protected val component: A, protected val propert
         scope.invoke(properties, component)
     }
 }
+
+
+interface ContainerStyle
+
+fun <T: ContainerStyle> T.className(): String {
+    return toString().replace(".*\\(".toRegex(), "").replace("\\).*".toRegex(), "")
+}
+
+interface ContainerAttributes {
+    fun all(): Array<StringPair>
+}

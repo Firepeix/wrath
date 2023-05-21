@@ -1,6 +1,5 @@
 package com.tutu.wrath.modules.expense.components
 
-import com.tutu.wrath.anger.tables.Column
 import com.tutu.wrath.anger.tables.DataTable
 import com.tutu.wrath.anger.tables.Row
 import com.tutu.wrath.anger.tables.dataTable
@@ -21,16 +20,16 @@ class ExpenseTable(private val getExpenses: GetExpenses) : Div(), CoroutineScope
 
     init {
         table = dataTable(
-            properties = DataTable.Properties(
-                Column("name", "Nome"),
-                Column("amount", "Valor"),
-                Column("date", "Data"),
-                Column("payed", "Pago"),
-                Column("card.name", "Cartão"),
-                Column("beneficiary.name", "Beneficiario"),
-                Column("installments", "Parcelamento"),
-                Column("actions", "Ações"),
-            )
+            columns = {
+                column("name", "Nome")
+                column("amount", "Valor")
+                column("date", "Data")
+                column("payed", "Pago")
+                column("card.name", "Cartão")
+                column("beneficiary.name", "Beneficiario")
+                column("installments", "Parcelamento")
+                column("actions", "Ações", shouldFilter = false)
+            }
         )
     }
 
@@ -45,8 +44,10 @@ class ExpenseTable(private val getExpenses: GetExpenses) : Div(), CoroutineScope
     //
 
     private fun initialize() {
-        launch {
-            table?.properties?.rows = getExpenses().unwrap(emptyList()).map { Row(it) }
+        table?.changeState() {
+            launch {
+                rows = getExpenses().unwrap(emptyList()).map { Row(it) }
+            }
         }
     }
 

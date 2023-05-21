@@ -7,9 +7,13 @@ import com.tutu.wrath.anger.modules.tailwind.dropdown.TwDropdown
 import io.kvision.core.Container
 import io.kvision.html.Div
 import io.kvision.html.Span
+import io.kvision.html.div
 import io.kvision.html.li
-import io.kvision.html.ul
 import io.kvision.snabbdom.VNode
+
+fun Container.dropdown(actuator: Container? = null): DropdownScope {
+    return Dropdown(actuator ?: this).also { add(it) }
+}
 
 
 interface DropdownActionScope {
@@ -29,7 +33,7 @@ class Dropdown(private val actuator: Container): Div(className = "relative"), Dr
 
     init {
         add(noop)
-        ul(className = "absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block") {
+        div(className = "absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block") {
             attributes("data-te-dropdown-menu-ref" to "")
             li("Action")
             li("Another action")
@@ -53,8 +57,4 @@ class Dropdown(private val actuator: Container): Div(className = "relative"), Dr
         dropdown?.toggle()
     }
 
-}
-
-fun Container.dropdown(actuator: Container? = null): DropdownScope {
-    return Dropdown(actuator ?: this).also { add(it) }
 }
