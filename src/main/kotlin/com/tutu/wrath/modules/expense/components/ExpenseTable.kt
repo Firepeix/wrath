@@ -1,8 +1,8 @@
 package com.tutu.wrath.modules.expense.components
 
-import com.tutu.wrath.anger.tables.DataTable
 import com.tutu.wrath.anger.tables.Row
-import com.tutu.wrath.anger.tables.dataTable
+import com.tutu.wrath.anger.tables.datatable.DataTable
+import com.tutu.wrath.anger.tables.datatable.dataTable
 import com.tutu.wrath.modules.expense.model.Expense
 import com.tutu.wrath.util.unwrap
 import io.kvision.core.Container

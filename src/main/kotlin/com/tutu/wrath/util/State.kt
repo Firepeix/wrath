@@ -12,11 +12,12 @@ interface StateProperties<L> {
     val listeners: L
 }
 
-interface StateScope{
-}
+abstract class StateScope<L>{
+    abstract val listeners: L
 
-fun <T: StateScope> T.init(block: T.() -> Unit) {
-    block.invoke(this)
+    fun init(block: L.() -> Unit) {
+        block.invoke(listeners)
+    }
 }
 
 abstract class StatefullWidget<S> {
